@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 200" width="350" height="200">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#f8f9fa" />
+  
+  <!-- Azure DevOps Logo -->
+  <rect x="30" y="30" width="40" height="40" rx="5" fill="#0078D7" />
+  <text x="42" y="55" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" font-weight="bold">A</text>
+  
+  <!-- Pipeline Flow -->
+  <rect x="100" y="80" width="60" height="40" rx="5" fill="#0078D7" opacity="0.8" />
+  <text x="110" y="105" font-family="monospace" font-size="12" fill="#ffffff">BUILD</text>
+  
+  <rect x="190" y="80" width="60" height="40" rx="5" fill="#0078D7" opacity="0.8" />
+  <text x="200" y="105" font-family="monospace" font-size="12" fill="#ffffff">TEST</text>
+  
+  <rect x="280" y="80" width="60" height="40" rx="5" fill="#0078D7" opacity="0.8" />
+  <text x="282" y="105" font-family="monospace" font-size="12" fill="#ffffff">DEPLOY</text>
+  
+  <!-- Connection Arrows -->
+  <line x1="160" y1="100" x2="190" y2="100" stroke="#343a40" stroke-width="2" />
+  <polygon points="190,100 183,96 183,104" fill="#343a40" />
+  
+  <line x1="250" y1="100" x2="280" y2="100" stroke="#343a40" stroke-width="2" />
+  <polygon points="280,100 273,96 273,104" fill="#343a40" />
+  
+  <!-- Kubernetes Symbol -->
+  <circle cx="280" cy="150" r="25" fill="#326CE5" opacity="0.8" />
+  <path d="M 280 135 L 290 145 L 280 155 L 270 145 Z" fill="#ffffff" />
+  <path d="M 280 135 L 290 145 L 280 155" fill="none" stroke="#ffffff" stroke-width="1.5" />
+  <path d="M 280 135 L 270 145 L 280 155" fill="none" stroke="#ffffff" stroke-width="1.5" />
+  
+  <!-- Microservices -->
+  <rect x="230" y="140" width="15" height="15" rx="2" fill="#ffffff" stroke="#326CE5" stroke-width="1.5" />
+  <rect x="230" y="160" width="15" height="15" rx="2" fill="#ffffff" stroke="#326CE5" stroke-width="1.5" />
+  <rect x="250" y="140" width="15" height="15" rx="2" fill="#ffffff" stroke="#326CE5" stroke-width="1.5" />
+  <rect x="250" y="160" width="15" height="15" rx="2" fill="#ffffff" stroke="#326CE5" stroke-width="1.5" />
+  
+  <!-- Code Symbol -->
+  <text x="110" y="150" font-family="monospace" font-size="30" fill="#0078D7" opacity="0.8">&lt;/&gt;</text>
+  
+  <!-- Title -->
+  <text x="175" y="190" font-family="Hind, sans-serif" font-size="14" fill="#343a40" text-anchor="middle" font-weight="bold">CI/CD Pipeline for Microservices</text>
+</svg> 

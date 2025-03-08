@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 200" width="350" height="200">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#f8f9fa" />
+  
+  <!-- Terraform Logo -->
+  <rect x="125" y="60" width="30" height="80" fill="#5C4EE5" />
+  <rect x="165" y="60" width="30" height="80" fill="#5C4EE5" />
+  <rect x="205" y="60" width="30" height="80" fill="#5C4EE5" opacity="0.7" />
+  
+  <!-- Code Block -->
+  <rect x="50" y="150" width="250" height="40" rx="5" fill="#ffffff" stroke="#5C4EE5" stroke-width="2" />
+  <text x="70" y="175" font-family="monospace" font-size="12" fill="#343a40">resource "aws_instance" "example" {}</text>
+  
+  <!-- Title -->
+  <text x="175" y="30" font-family="Inter, sans-serif" font-size="16" fill="#343a40" text-anchor="middle" font-weight="bold">TERRAFORM BEST PRACTICES</text>
+</svg> 

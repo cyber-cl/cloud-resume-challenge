@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 200" width="350" height="200">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#f8f9fa" />
+  
+  <!-- Terraform Logo -->
+  <rect x="50" y="50" width="40" height="40" fill="#5C4EE5" />
+  <path d="M 60 60 L 60 80 L 80 70 Z" fill="#ffffff" />
+  
+  <!-- CloudFormation Logo -->
+  <rect x="260" y="50" width="40" height="40" fill="#FF9900" />
+  <path d="M 270 60 C 270 55 275 50 280 55 C 285 50 290 55 290 60 C 290 65 285 70 280 70 L 275 70 C 270 70 270 65 270 60 Z" fill="#ffffff" />
+  
+  <!-- Code Blocks -->
+  <rect x="30" y="110" width="120" height="70" rx="5" fill="#ffffff" stroke="#5C4EE5" stroke-width="2" />
+  <text x="40" y="130" font-family="monospace" font-size="10" fill="#343a40">resource "aws_s3_bucket" {</text>
+  <text x="40" y="145" font-family="monospace" font-size="10" fill="#343a40">  bucket = "my-bucket"</text>
+  <text x="40" y="160" font-family="monospace" font-size="10" fill="#343a40">  acl    = "private"</text>
+  <text x="40" y="175" font-family="monospace" font-size="10" fill="#343a40">}</text>
+  
+  <rect x="200" y="110" width="120" height="70" rx="5" fill="#ffffff" stroke="#FF9900" stroke-width="2" />
+  <text x="210" y="130" font-family="monospace" font-size="10" fill="#343a40">Resources:</text>
+  <text x="210" y="145" font-family="monospace" font-size="10" fill="#343a40">  MyBucket:</text>
+  <text x="210" y="160" font-family="monospace" font-size="10" fill="#343a40">    Type: AWS::S3::Bucket</text>
+  <text x="210" y="175" font-family="monospace" font-size="10" fill="#343a40">    Properties: {}</text>
+  
+  <!-- Connection Line -->
+  <line x1="150" y1="70" x2="200" y2="70" stroke="#343a40" stroke-width="2" stroke-dasharray="5,3" />
+  <text x="175" y="60" font-family="monospace" font-size="12" fill="#343a40" text-anchor="middle">IaC</text>
+  
+  <!-- AWS Logo -->
+  <rect x="160" y="30" width="30" height="30" rx="5" fill="#232F3E" />
+  <path d="M 165 45 L 175 35 L 185 45 L 175 55 Z" fill="#FF9900" />
+  
+  <!-- Title -->
+  <text x="175" y="190" font-family="Hind, sans-serif" font-size="14" fill="#343a40" text-anchor="middle" font-weight="bold">Infrastructure as Code Templates</text>
+</svg> 

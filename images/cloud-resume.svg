@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 200" width="350" height="200">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#f8f9fa" />
+  
+  <!-- AWS Cloud Symbol -->
+  <path d="M 175 50 C 175 35 190 25 205 35 C 215 20 235 20 245 35 C 260 25 275 35 275 50 C 275 65 260 75 245 75 L 205 75 C 190 75 175 65 175 50 Z" fill="#FF9900" opacity="0.8" />
+  
+  <!-- Resume Document -->
+  <rect x="100" y="90" width="150" height="180" rx="5" fill="#ffffff" stroke="#6c757d" stroke-width="2" />
+  <line x1="120" y1="110" x2="230" y2="110" stroke="#4a6cf7" stroke-width="2" />
+  <line x1="120" y1="130" x2="230" y2="130" stroke="#6c757d" stroke-width="2" />
+  <line x1="120" y1="150" x2="230" y2="150" stroke="#6c757d" stroke-width="2" />
+  <line x1="120" y1="170" x2="180" y2="170" stroke="#6c757d" stroke-width="2" />
+  
+  <!-- Lambda Function -->
+  <rect x="50" y="60" width="60" height="40" rx="5" fill="#FF9900" opacity="0.7" />
+  <text x="65" y="85" font-family="monospace" font-size="12" fill="#ffffff">λ</text>
+  
+  <!-- DynamoDB -->
+  <rect x="240" y="60" width="60" height="40" rx="5" fill="#4a6cf7" opacity="0.7" />
+  <text x="255" y="85" font-family="monospace" font-size="12" fill="#ffffff">DB</text>
+  
+  <!-- Connection Lines -->
+  <line x1="110" y1="80" x2="175" y2="80" stroke="#343a40" stroke-width="1.5" stroke-dasharray="4" />
+  <line x1="240" y1="80" x2="175" y2="80" stroke="#343a40" stroke-width="1.5" stroke-dasharray="4" />
+  
+  <!-- Counter -->
+  <rect x="140" y="140" width="70" height="25" rx="3" fill="#4a6cf7" opacity="0.2" />
+  <text x="150" y="158" font-family="monospace" font-size="14" fill="#343a40">0001</text>
+  
+  <!-- Title -->
+  <text x="175" y="190" font-family="Hind, sans-serif" font-size="14" fill="#343a40" text-anchor="middle" font-weight="bold">Cloud Resume Challenge</text>
+</svg> 

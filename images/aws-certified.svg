@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="100" fill="#232F3E" />
+  
+  <!-- AWS Logo -->
+  <path d="M 60 80 L 80 60 L 100 80 L 120 60 L 140 80 L 120 100 L 140 120 L 120 140 L 100 120 L 80 140 L 60 120 L 80 100 Z" fill="#FF9900" />
+  
+  <!-- Certification Text -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="bold">AWS CERTIFIED</text>
+</svg> 

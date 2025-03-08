@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="100" fill="#5C4EE5" />
+  
+  <!-- Terraform Logo -->
+  <rect x="60" y="70" width="25" height="60" fill="#FFFFFF" />
+  <rect x="95" y="70" width="25" height="60" fill="#FFFFFF" />
+  <rect x="130" y="70" width="25" height="60" fill="#FFFFFF" opacity="0.8" />
+  
+  <!-- Certification Text -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="bold">TERRAFORM CERTIFIED</text>
+</svg> 

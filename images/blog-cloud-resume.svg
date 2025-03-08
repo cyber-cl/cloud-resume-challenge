@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 200" width="350" height="200">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#f8f9fa" />
+  
+  <!-- Cloud Symbol -->
+  <path d="M 175 70 C 175 55 190 45 205 55 C 215 40 235 40 245 55 C 260 45 275 55 275 70 C 275 85 260 95 245 95 L 205 95 C 190 95 175 85 175 70 Z" fill="#4a6cf7" opacity="0.8" />
+  
+  <!-- Resume Document -->
+  <rect x="125" y="90" width="100" height="120" rx="5" fill="#ffffff" stroke="#6c757d" stroke-width="2" />
+  <line x1="140" y1="110" x2="210" y2="110" stroke="#4a6cf7" stroke-width="2" />
+  <line x1="140" y1="130" x2="210" y2="130" stroke="#6c757d" stroke-width="2" />
+  <line x1="140" y1="150" x2="210" y2="150" stroke="#6c757d" stroke-width="2" />
+  <line x1="140" y1="170" x2="180" y2="170" stroke="#6c757d" stroke-width="2" />
+  
+  <!-- Counter -->
+  <rect x="150" y="185" width="50" height="15" rx="3" fill="#4a6cf7" opacity="0.2" />
+  <text x="155" y="197" font-family="monospace" font-size="10" fill="#343a40">0001</text>
+  
+  <!-- Title -->
+  <text x="175" y="30" font-family="Inter, sans-serif" font-size="16" fill="#343a40" text-anchor="middle" font-weight="bold">CLOUD RESUME CHALLENGE</text>
+</svg> 

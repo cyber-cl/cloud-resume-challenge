@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Background Circle -->
+  <circle cx="200" cy="200" r="200" fill="#4a6cf7" />
+  
+  <!-- Inner Circle -->
+  <circle cx="200" cy="200" r="190" fill="#ffffff" />
+  
+  <!-- Person Silhouette -->
+  <circle cx="200" cy="150" r="70" fill="#343a40" />
+  <path d="M 110 350 C 110 270 290 270 290 350" fill="#343a40" />
+  
+  <!-- Cloud Symbols -->
+  <path d="M 120 100 C 120 85 135 75 150 85 C 160 70 180 70 190 85 C 205 75 220 85 220 100 C 220 115 205 125 190 125 L 150 125 C 135 125 120 115 120 100 Z" fill="#4a6cf7" opacity="0.7" />
+  
+  <path d="M 280 130 C 280 115 295 105 310 115 C 320 100 340 100 350 115 C 365 105 380 115 380 130 C 380 145 365 155 350 155 L 310 155 C 295 155 280 145 280 130 Z" fill="#4a6cf7" opacity="0.7" transform="scale(0.5) translate(300, 100)" />
+  
+  <!-- Code Symbols -->
+  <text x="150" y="350" font-family="monospace" font-size="20" fill="#4a6cf7" font-weight="bold">&lt;/&gt;</text>
+  <text x="210" y="350" font-family="monospace" font-size="20" fill="#4a6cf7" font-weight="bold">{}</text>
+</svg> 

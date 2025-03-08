@@ -1,0 +1,20 @@
+PROFILE PICTURE INSTRUCTIONS
+
+To add your own profile picture:
+
+1. Prepare your image:
+   - Use a square image (ideally 400x400 pixels)
+   - Make sure it has good lighting and a clean background
+   - Save it as PNG or JPG format
+
+2. Name your file:
+   - Save your image as "profile-pic.png" 
+
+3. Add to the images folder:
+   - Place the file in the "images" directory of your project
+
+4. Test your website:
+   - Refresh your browser to see your profile picture displayed
+   - The image will be automatically cropped to a circle
+
+Note: If your image appears distorted, try using a perfectly square image. 

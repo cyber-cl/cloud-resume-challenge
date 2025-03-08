@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="100" fill="#0078D4" />
+  
+  <!-- Azure Logo -->
+  <path d="M 60 70 L 100 70 L 140 130 L 100 130 Z" fill="#FFFFFF" />
+  <path d="M 80 90 L 120 90 L 140 130 L 100 130 Z" fill="#FFFFFF" opacity="0.8" />
+  
+  <!-- Certification Text -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="bold">AZURE CERTIFIED</text>
+</svg> 
