@@ -113,6 +113,23 @@ To deploy this website as part of the Cloud Resume Challenge:
 4. Configure a custom domain with Route 53 (optional)
 5. Set up CI/CD pipeline for automated deployment (optional)
 
+### Automated Deployment with GitHub Actions
+
+This project includes a GitHub Actions workflow that automatically deploys changes to AWS S3 whenever you push to the main branch:
+
+1. The workflow uses Jake Jarvis's S3 sync action to efficiently sync files to S3
+2. It sets appropriate cache control headers for optimal performance
+3. It creates a CloudFront invalidation to ensure changes are immediately visible
+
+To set up the GitHub Actions workflow:
+
+1. Add the following secrets to your GitHub repository:
+   - `AWS_ACCESS_KEY_ID`: Your AWS access key with S3 and CloudFront permissions
+   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
+   - `CLOUDFRONT_DISTRIBUTION_ID`: Your CloudFront distribution ID (if using CloudFront)
+
+2. Push changes to the main branch to trigger the deployment
+
 ## Technologies Used
 
 - HTML5
