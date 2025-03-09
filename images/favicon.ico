@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" />
+  
+  <!-- Cloud Platform -->
+  <rect x="150" y="300" width="500" height="20" rx="10" fill="#4a6cf7" />
+  
+  <!-- Cloud 1 -->
+  <circle cx="200" cy="250" r="40" fill="#4a6cf7" opacity="0.9" />
+  <circle cx="250" cy="230" r="50" fill="#4a6cf7" opacity="0.9" />
+  <circle cx="300" cy="250" r="40" fill="#4a6cf7" opacity="0.9" />
+  
+  <!-- Cloud 2 -->
+  <circle cx="500" cy="250" r="40" fill="#4a6cf7" opacity="0.9" />
+  <circle cx="550" cy="230" r="50" fill="#4a6cf7" opacity="0.9" />
+  <circle cx="600" cy="250" r="40" fill="#4a6cf7" opacity="0.9" />
+  
+  <!-- Server Racks -->
+  <rect x="220" y="320" width="60" height="100" rx="5" fill="#343a40" />
+  <rect x="230" y="330" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="230" y="350" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="230" y="370" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="230" y="390" width="40" height="10" rx="2" fill="#6c757d" />
+  
+  <rect x="370" y="320" width="60" height="100" rx="5" fill="#343a40" />
+  <rect x="380" y="330" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="380" y="350" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="380" y="370" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="380" y="390" width="40" height="10" rx="2" fill="#6c757d" />
+  
+  <rect x="520" y="320" width="60" height="100" rx="5" fill="#343a40" />
+  <rect x="530" y="330" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="530" y="350" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="530" y="370" width="40" height="10" rx="2" fill="#6c757d" />
+  <rect x="530" y="390" width="40" height="10" rx="2" fill="#6c757d" />
+  
+  <!-- Connection Lines -->
+  <line x1="250" y1="300" x2="250" y2="320" stroke="#4a6cf7" stroke-width="3" />
+  <line x1="400" y1="300" x2="400" y2="320" stroke="#4a6cf7" stroke-width="3" />
+  <line x1="550" y1="300" x2="550" y2="320" stroke="#4a6cf7" stroke-width="3" />
+  
+  <!-- Data Flow Animation -->
+  <circle cx="250" cy="310" r="5" fill="#ffffff">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="400" cy="310" r="5" fill="#ffffff">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="550" cy="310" r="5" fill="#ffffff">
+    <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Devices -->
+  <rect x="150" y="450" width="120" height="80" rx="5" fill="#6c757d" />
+  <rect x="160" y="460" width="100" height="60" rx="2" fill="#343a40" />
+  
+  <rect x="340" y="470" width="120" height="60" rx="5" fill="#6c757d" />
+  <rect x="350" y="480" width="100" height="40" rx="2" fill="#343a40" />
+  
+  <rect x="530" y="450" width="80" height="120" rx="5" fill="#6c757d" />
+  <rect x="540" y="460" width="60" height="100" rx="2" fill="#343a40" />
+  
+  <!-- Connection Lines to Devices -->
+  <path d="M 250 420 L 250 450 L 210 450" stroke="#4a6cf7" stroke-width="2" fill="none" />
+  <path d="M 400 420 L 400 470 L 400 470" stroke="#4a6cf7" stroke-width="2" fill="none" />
+  <path d="M 550 420 L 550 450 L 570 450" stroke="#4a6cf7" stroke-width="2" fill="none" />
+  
+  <!-- Cloud Icons -->
+  <path d="M 300 150 C 300 130 320 120 340 130 C 350 110 380 110 390 130 C 410 120 430 130 430 150 C 430 170 410 180 390 180 L 340 180 C 320 180 300 170 300 150 Z" fill="#4a6cf7" opacity="0.7" />
+  <path d="M 450 180 C 450 160 470 150 490 160 C 500 140 530 140 540 160 C 560 150 580 160 580 180 C 580 200 560 210 540 210 L 490 210 C 470 210 450 200 450 180 Z" fill="#4a6cf7" opacity="0.7" />
+  
+  <!-- Code Symbols -->
+  <text x="180" y="490" font-family="monospace" font-size="14" fill="#ffffff">&lt;/&gt;</text>
+  <text x="380" y="505" font-family="monospace" font-size="14" fill="#ffffff">{...}</text>
+  <text x="555" y="510" font-family="monospace" font-size="14" fill="#ffffff">01</text>
+</svg> 
