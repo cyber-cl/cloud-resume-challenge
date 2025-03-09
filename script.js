@@ -6,12 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-links li');
     const navbar = document.querySelector('#navbar');
 
-    // Initialize visitor counter immediately
-    fetchVisitorCount().then(count => {
-        // Animate the counter after fetching
-        animateCounter(count);
-    });
-
     // Toggle navigation menu
     burger.addEventListener('click', () => {
         nav.classList.toggle('active');
@@ -242,74 +236,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Animate counter digits
     const counterDigits = document.querySelectorAll('.digit');
     
-    function animateCounter(finalCount) {
-        const visitorCountElement = document.getElementById('visitor-count-value');
-        if (!visitorCountElement) return;
+    function animateCounter() {
+        const counterPosition = document.querySelector('.counter').getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
         
-        // Ensure finalCount is a number
-        finalCount = parseInt(finalCount) || 1;
-        
-        let startCount = 1;
-        let currentCount = startCount;
-        const duration = 2000; // 2 seconds
-        const interval = 50; // Update every 50ms
-        const steps = duration / interval;
-        const increment = (finalCount - startCount) / steps;
-        
-        // Only animate if there's a significant difference
-        if (finalCount - startCount <= 5) {
-            visitorCountElement.textContent = finalCount;
-            return;
+        if (counterPosition < screenPosition) {
+            counterDigits.forEach((digit, index) => {
+                setTimeout(() => {
+                    digit.classList.add('animate');
+                }, index * 200);
+            });
         }
-        
-        const timer = setInterval(() => {
-            currentCount += increment;
-            if (currentCount >= finalCount) {
-                clearInterval(timer);
-                currentCount = finalCount;
-            }
-            visitorCountElement.textContent = Math.floor(currentCount);
-        }, interval);
     }
 
     // Visitor counter functionality with Lambda integration
     async function fetchVisitorCount() {
         try {
             // Call your API Gateway endpoint that triggers the Lambda function
-            const response = await fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws');
-            const data = await response.json();
-            
-            // Extract the count value from the response and ensure it's a number
-            let count;
-            if (typeof data === 'object' && data !== null) {
-                // If response is an object, try to get count property
-                count = data.count || data.visitorCount || data.visitors || data.value || 0;
-            } else if (!isNaN(data)) {
-                // If response is a direct number
-                count = data;
-            } else {
-                // Fallback to 1 if we can't determine the count
-                count = 1;
-            }
-            
-            // Ensure count is a number
-            count = parseInt(count) || 1;
+            const response = await fetch("https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws/");
+            const count = await response.json();
             
             // Update the counter display with the real count
-            const visitorCountElement = document.getElementById('visitor-count-value');
-            if (visitorCountElement) {
-                visitorCountElement.textContent = count;
-                
-                // Log for debugging
-                console.log('Visitor count data:', data);
-                console.log('Parsed count:', count);
-            }
-            
-            return count;
+            updateCounterDisplay(count);
         } catch (error) {
             console.error('Error fetching visitor count:', error);
-            return 1;
         }
+    }
+
+    function updateCounterDisplay(count) {
+        const counterDigits = document.querySelectorAll('.digit');
+        const countStr = count.toString().padStart(4, '0');
+        
+        counterDigits.forEach((digit, index) => {
+            digit.textContent = countStr[index];
+        });
     }
 
     // Call fetchVisitorCount when the counter section is visible
@@ -322,10 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const screenPosition = window.innerHeight;
             
             if (counterPosition < screenPosition) {
-                fetchVisitorCount().then(count => {
-                    // Animate the counter after fetching
-                    animateCounter(count);
-                });
+                fetchVisitorCount();
                 counterFetched = true;
             }
         }
@@ -422,6 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
         animateBlogPosts();
         animateSkills();
         animateProjects();
+        animateCounter();
         checkCounterVisibility();
     });
 
@@ -431,6 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
     animateBlogPosts();
     animateSkills();
     animateProjects();
+    animateCounter();
     checkCounterVisibility();
 
     // Add hover effect for skill items
@@ -469,6 +428,39 @@ document.addEventListener('DOMContentLoaded', function() {
         profileImage.addEventListener('mouseleave', () => {
             profileImage.querySelector('img').style.transform = 'scale(1)';
         });
+    }
+    
+    // Initialize visitor counter animation
+    const visitorCount = document.getElementById('visitor-count-value');
+    if (visitorCount) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const count = parseInt(visitorCount.textContent);
+                    animateCounter(count);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(document.querySelector('.visitor-counter'));
+    }
+    
+    function animateCounter(finalCount) {
+        let count = 0;
+        const duration = 2000; // 2 seconds
+        const interval = 50; // Update every 50ms
+        const steps = duration / interval;
+        const increment = finalCount / steps;
+        
+        const timer = setInterval(() => {
+            count += increment;
+            if (count >= finalCount) {
+                clearInterval(timer);
+                count = finalCount;
+            }
+            visitorCount.textContent = Math.floor(count);
+        }, interval);
     }
 });
 
