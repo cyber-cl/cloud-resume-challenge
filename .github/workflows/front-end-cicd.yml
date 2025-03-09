@@ -1,78 +1,22 @@
-name: Deploy to S3
+name: Upload Website
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
-  workflow_dispatch:  # Allows manual triggering
+    - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
-      
-      - name: Deploy static site to S3 bucket
-        run: |
-          # Sync all files to S3 with appropriate content types
-          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "server.py" \
-            --exclude "README.md" \
-            --exclude ".gitignore" \
-            --exclude "resume/*" \
-            --cache-control "max-age=86400"
-          
-          # Set content type for HTML files
-          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/index.html s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
-            --metadata-directive REPLACE \
-            --content-type "text/html; charset=utf-8" \
-            --cache-control "max-age=3600"
-          
-          # Set content type for CSS files
-          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/styles.css s3://${{ secrets.S3_BUCKET_NAME }}/styles.css \
-            --metadata-directive REPLACE \
-            --content-type "text/css; charset=utf-8" \
-            --cache-control "max-age=86400"
-          
-          # Set content type for JavaScript files
-          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/script.js s3://${{ secrets.S3_BUCKET_NAME }}/script.js \
-            --metadata-directive REPLACE \
-            --content-type "application/javascript; charset=utf-8" \
-            --cache-control "max-age=86400"
-          
-          # Set content type for SVG files
-          find . -name "*.svg" | while read file; do
-            aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/${file:2} s3://${{ secrets.S3_BUCKET_NAME }}/${file:2} \
-              --metadata-directive REPLACE \
-              --content-type "image/svg+xml; charset=utf-8" \
-              --cache-control "max-age=86400"
-          done
-      
-      - name: Check if CloudFront distribution ID exists
-        id: check-cloudfront
-        run: |
-          if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
-            echo "has_distribution=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_distribution=false" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Invalidate CloudFront distribution
-        if: steps.check-cloudfront.outputs.has_distribution == 'true'
-        run: |
-          # Create CloudFront invalidation to ensure changes are immediately visible
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+    - uses: actions/checkout@master
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl private --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
+        SOURCE_DIR: '.'
