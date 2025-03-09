@@ -22,20 +22,18 @@ jobs:
           aws-region: us-east-1  # Change to your AWS region where your S3 bucket is located
       
       - name: Deploy static site to S3 bucket
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete --cache-control 'max-age=86400'
+        env:
+          AWS_S3_BUCKET: cloud-resume-challenge-prashant
+          SOURCE_DIR: .
+          DEST_DIR: ''
+          AWS_REGION: us-east-1
+          EXCLUDE_PATTERN: '.git/* .github/* server.py README.md .gitignore resume/*'
+      
+      - name: Set shorter cache for HTML files
         run: |
-          # Sync all website files to your S3 bucket
-          # Replace 'cloud-resume-challenge-yourname' with your actual S3 bucket name
-          aws s3 sync . s3://cloud-resume-challenge-prashant \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "server.py" \
-            --exclude "README.md" \
-            --exclude ".gitignore" \
-            --exclude "resume/*" \
-            --cache-control "max-age=86400"
-          
-          # Set appropriate cache control for HTML files (shorter cache time)
           aws s3 cp s3://cloud-resume-challenge-prashant/index.html s3://cloud-resume-challenge-prashant/index.html \
             --metadata-directive REPLACE \
             --cache-control "max-age=3600"
