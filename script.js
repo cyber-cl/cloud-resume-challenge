@@ -249,17 +249,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Visitor counter functionality
+    // Visitor counter functionality with Lambda integration
     async function fetchVisitorCount() {
         try {
-            // In a real implementation, this would be an API call to your AWS Lambda function
-            // For demonstration purposes, we'll simulate an API call with a random number
+            // Call your API Gateway endpoint that triggers the Lambda function
+            const response = await fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws');
+            const count = await response.json();
             
-            // Simulating API delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // For demo purposes, generate a random number between 1000 and 9999
-            const count = Math.floor(Math.random() * 9000) + 1000;
+            // Update the counter display with the real count
             updateCounterDisplay(count);
         } catch (error) {
             console.error('Error fetching visitor count:', error);
@@ -280,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let counterFetched = false;
     
     function checkCounterVisibility() {
-        if (!counterFetched) {
+        if (!counterFetched && counterSection) {
             const counterPosition = counterSection.getBoundingClientRect().top;
             const screenPosition = window.innerHeight;
             
@@ -472,20 +469,6 @@ window.addEventListener('load', function() {
     document.body.classList.add('loaded');
 });
 
-// Visitor Counter
-document.addEventListener('DOMContentLoaded', function() {
-    // Simulate visitor count increment (in a real implementation, this would be an API call)
-    let count = localStorage.getItem('visitorCount') || 0;
-    count = parseInt(count) + 1;
-    localStorage.setItem('visitorCount', count);
-    
-    // Update the visitor count display
-    const visitorCountElement = document.getElementById('visitor-count-value');
-    if (visitorCountElement) {
-        visitorCountElement.textContent = count;
-    }
-});
-
 // Navigation toggle
 const navSlide = () => {
     const burger = document.querySelector('.burger');
@@ -565,4 +548,4 @@ const app = () => {
 }
 
 // Run when DOM is loaded
-document.addEventListener('DOMContentLoaded', app); 
+document.addEventListener('DOMContentLoaded', app);
