@@ -1,0 +1,50 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Change to your AWS region where your S3 bucket is located
+      
+      - name: Deploy static site to S3 bucket
+        run: |
+          # Sync all website files to your S3 bucket
+          # Replace 'cloud-resume-challenge-yourname' with your actual S3 bucket name
+          aws s3 sync . s3://cloud-resume-challenge-prashant \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "server.py" \
+            --exclude "README.md" \
+            --exclude ".gitignore" \
+            --exclude "resume/*" \
+            --cache-control "max-age=86400"
+          
+          # Set appropriate cache control for HTML files (shorter cache time)
+          aws s3 cp s3://cloud-resume-challenge-prashant/index.html s3://cloud-resume-challenge-prashant/index.html \
+            --metadata-directive REPLACE \
+            --cache-control "max-age=3600"
+      
+      - name: Invalidate CloudFront distribution
+        run: |
+          # Create CloudFront invalidation to ensure changes are immediately visible
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+        # Only run this step if CloudFront distribution ID is provided
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
