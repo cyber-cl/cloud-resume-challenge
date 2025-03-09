@@ -22,21 +22,43 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
       
       - name: Deploy static site to S3 bucket
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete --cache-control 'max-age=86400'
-        env:
-          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-          SOURCE_DIR: .
-          DEST_DIR: ''
-          AWS_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
-          EXCLUDE_PATTERN: '.git/* .github/* server.py README.md .gitignore resume/*'
-      
-      - name: Set shorter cache for HTML files
         run: |
+          # Sync all files to S3 with appropriate content types
+          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "server.py" \
+            --exclude "README.md" \
+            --exclude ".gitignore" \
+            --exclude "resume/*" \
+            --cache-control "max-age=86400"
+          
+          # Set content type for HTML files
           aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/index.html s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
             --metadata-directive REPLACE \
+            --content-type "text/html; charset=utf-8" \
             --cache-control "max-age=3600"
+          
+          # Set content type for CSS files
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/styles.css s3://${{ secrets.S3_BUCKET_NAME }}/styles.css \
+            --metadata-directive REPLACE \
+            --content-type "text/css; charset=utf-8" \
+            --cache-control "max-age=86400"
+          
+          # Set content type for JavaScript files
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/script.js s3://${{ secrets.S3_BUCKET_NAME }}/script.js \
+            --metadata-directive REPLACE \
+            --content-type "application/javascript; charset=utf-8" \
+            --cache-control "max-age=86400"
+          
+          # Set content type for SVG files
+          find . -name "*.svg" | while read file; do
+            aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/${file:2} s3://${{ secrets.S3_BUCKET_NAME }}/${file:2} \
+              --metadata-directive REPLACE \
+              --content-type "image/svg+xml; charset=utf-8" \
+              --cache-control "max-age=86400"
+          done
       
       - name: Check if CloudFront distribution ID exists
         id: check-cloudfront
