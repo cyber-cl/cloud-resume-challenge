@@ -38,8 +38,17 @@ jobs:
             --metadata-directive REPLACE \
             --cache-control "max-age=3600"
       
+      - name: Check if CloudFront distribution ID exists
+        id: check-cloudfront
+        run: |
+          if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
+            echo "has_distribution=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_distribution=false" >> $GITHUB_OUTPUT
+          fi
+      
       - name: Invalidate CloudFront distribution
-        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        if: steps.check-cloudfront.outputs.has_distribution == 'true'
         run: |
           # Create CloudFront invalidation to ensure changes are immediately visible
           aws cloudfront create-invalidation \
