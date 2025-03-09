@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-links li');
     const navbar = document.querySelector('#navbar');
 
+    // Initialize visitor counter immediately
+    initVisitorCounter();
+
     // Toggle navigation menu
     burger.addEventListener('click', () => {
         nav.classList.toggle('active');
@@ -250,26 +253,89 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Visitor counter functionality with Lambda integration
-    async function fetchVisitorCount() {
-        try {
-            // Call your API Gateway endpoint that triggers the Lambda function
-            const response = await fetch("https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws/");
-            const count = await response.json();
-            
-            // Update the counter display with the real count
-            updateCounterDisplay(count);
-        } catch (error) {
-            console.error('Error fetching visitor count:', error);
-        }
-    }
+    function initVisitorCounter() {
+        const visitorCountElement = document.getElementById('visitor-count-value');
+        if (!visitorCountElement) return;
 
-    function updateCounterDisplay(count) {
-        const counterDigits = document.querySelectorAll('.digit');
-        const countStr = count.toString().padStart(4, '0');
+        // Set initial value
+        visitorCountElement.textContent = "Loading...";
+
+        // Fetch the visitor count
+        fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Raw visitor data:', data);
+                
+                // Extract count from various possible response formats
+                let count;
+                if (typeof data === 'object' && data !== null) {
+                    count = data.count || data.visitorCount || data.visitors || data.value;
+                    if (count === undefined && data.body) {
+                        // Try to parse body if it's a string
+                        try {
+                            const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+                            count = bodyData.count || bodyData.visitorCount || bodyData.visitors || bodyData.value;
+                        } catch (e) {
+                            console.error('Error parsing body:', e);
+                        }
+                    }
+                } else {
+                    count = data;
+                }
+                
+                // Ensure count is a number
+                count = Number(count);
+                if (isNaN(count) || count < 1) {
+                    count = 1;
+                }
+                
+                console.log('Processed count:', count);
+                
+                // Update the counter with animation
+                animateVisitorCount(count);
+            })
+            .catch(error => {
+                console.error('Error fetching visitor count:', error);
+                visitorCountElement.textContent = "1"; // Fallback value
+            });
+    }
+    
+    function animateVisitorCount(targetCount) {
+        const visitorCountElement = document.getElementById('visitor-count-value');
+        if (!visitorCountElement) return;
         
-        counterDigits.forEach((digit, index) => {
-            digit.textContent = countStr[index];
-        });
+        // Clear any "Loading..." text
+        if (visitorCountElement.textContent === "Loading...") {
+            visitorCountElement.textContent = "1";
+        }
+        
+        const startCount = 1;
+        let currentCount = startCount;
+        
+        // Skip animation for small numbers
+        if (targetCount <= 5) {
+            visitorCountElement.textContent = targetCount;
+            return;
+        }
+        
+        const duration = 2000; // 2 seconds
+        const interval = 30; // Update every 30ms
+        const steps = duration / interval;
+        const increment = (targetCount - startCount) / steps;
+        
+        const timer = setInterval(() => {
+            currentCount += increment;
+            if (currentCount >= targetCount) {
+                clearInterval(timer);
+                currentCount = targetCount;
+            }
+            visitorCountElement.textContent = Math.floor(currentCount);
+        }, interval);
     }
 
     // Call fetchVisitorCount when the counter section is visible
@@ -282,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const screenPosition = window.innerHeight;
             
             if (counterPosition < screenPosition) {
-                fetchVisitorCount();
+                initVisitorCounter();
                 counterFetched = true;
             }
         }
@@ -430,37 +496,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Initialize visitor counter animation
+    // Initialize visitor counter
     const visitorCount = document.getElementById('visitor-count-value');
     if (visitorCount) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const count = parseInt(visitorCount.textContent);
-                    animateCounter(count);
+                if (entry.isIntersecting && !counterFetched) {
+                    initVisitorCounter();
+                    counterFetched = true;
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.1 });
         
         observer.observe(document.querySelector('.visitor-counter'));
-    }
-    
-    function animateCounter(finalCount) {
-        let count = 0;
-        const duration = 2000; // 2 seconds
-        const interval = 50; // Update every 50ms
-        const steps = duration / interval;
-        const increment = finalCount / steps;
-        
-        const timer = setInterval(() => {
-            count += increment;
-            if (count >= finalCount) {
-                clearInterval(timer);
-                count = finalCount;
-            }
-            visitorCount.textContent = Math.floor(count);
-        }, interval);
     }
 });
 
