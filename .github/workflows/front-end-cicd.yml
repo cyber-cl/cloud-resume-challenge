@@ -19,30 +19,29 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Change to your AWS region where your S3 bucket is located
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
       
       - name: Deploy static site to S3 bucket
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --delete --cache-control 'max-age=86400'
         env:
-          AWS_S3_BUCKET: cloud-resume-challenge-prashant
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
           SOURCE_DIR: .
           DEST_DIR: ''
-          AWS_REGION: us-east-1
+          AWS_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
           EXCLUDE_PATTERN: '.git/* .github/* server.py README.md .gitignore resume/*'
       
       - name: Set shorter cache for HTML files
         run: |
-          aws s3 cp s3://cloud-resume-challenge-prashant/index.html s3://cloud-resume-challenge-prashant/index.html \
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/index.html s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
             --metadata-directive REPLACE \
             --cache-control "max-age=3600"
       
       - name: Invalidate CloudFront distribution
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: |
           # Create CloudFront invalidation to ensure changes are immediately visible
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
-        # Only run this step if CloudFront distribution ID is provided
-        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
