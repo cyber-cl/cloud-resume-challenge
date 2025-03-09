@@ -22,3 +22,19 @@ jobs:
       
       - name: Deploy to S3
         run: aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} --delete --exclude ".git/*" --exclude ".github/*"
+      
+      - name: Check if CloudFront distribution ID exists
+        id: check-cloudfront
+        run: |
+          if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
+            echo "has_distribution=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_distribution=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Invalidate CloudFront distribution
+        if: steps.check-cloudfront.outputs.has_distribution == 'true'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
