@@ -77,26 +77,30 @@ Example Lambda function (Python):
 import json
 import boto3
 
+# Initialize DynamoDB resource
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('visitor-counter')
+
+# Reference the specific DynamoDB table
+table = dynamodb.Table('cloudresumechallenge-table')
 
 def lambda_handler(event, context):
+    # Use update_item with expression attribute names to avoid reserved keyword issue
     response = table.update_item(
-        Key={'id': 'visitors'},
-        UpdateExpression='ADD visits :inc',
+        Key={'id': '1'},
+        UpdateExpression='SET #v = #v + :inc',
+        ExpressionAttributeNames={'#v': 'views'},  # Use #v to represent the reserved keyword 'views'
         ExpressionAttributeValues={':inc': 1},
         ReturnValues='UPDATED_NEW'
     )
     
-    visits = response['Attributes']['visits']
+    # Extract the updated view count
+    updated_views = response['Attributes']['views']
     
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Access-Control-Allow-Origin': '*'
-        },
-        'body': json.dumps({'visits': visits})
-    }
+    # Print the new count (for logging)
+    print(updated_views)
+    
+    # Return the updated view count
+    return updated_views
 ```
 
 ## Deployment
