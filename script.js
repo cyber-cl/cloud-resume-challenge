@@ -387,6 +387,8 @@ function initBookingForm() {
         }
 
         const formData = new FormData(form);
+        formData.append('access_key', '435dc20a-b900-4fe2-9b89-72e694f582ca');
+
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Booking...';
