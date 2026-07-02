@@ -1931,6 +1931,14 @@ section:last-of-type::after {
 }
 
 @media screen and (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    .container {
+        padding: 0 18px;
+    }
+
     #navbar {
         padding: 16px 20px;
     }
@@ -1966,6 +1974,17 @@ section:last-of-type::after {
 
     .hero-content h1 {
         font-size: 2.2rem;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .btn {
+        min-height: 46px;
+        padding: 12px 22px;
     }
 
     section {
@@ -2006,20 +2025,51 @@ section:last-of-type::after {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .about-image img {
+        max-width: 220px;
+        border-radius: 24px;
+    }
 }
 
 @media screen and (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
     .hero-content h1 {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
     }
 
     .cta-buttons {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
     }
 
     .cta-buttons .btn {
         justify-content: center;
+        width: 100%;
+    }
+
+    .about-details {
+        gap: 10px;
+    }
+
+    .about-details .detail {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-card,
+    .blog-post,
+    .certification-card,
+    .timeline-content {
+        padding: 18px;
     }
 
     .stats-grid {

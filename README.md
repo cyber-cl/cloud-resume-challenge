@@ -33,10 +33,21 @@ This website is specifically designed to work with the Cloud Resume Challenge, w
 
 1. Creating a static website hosted in an S3 bucket
 2. Setting up HTTPS with CloudFront
-3. Implementing a visitor counter with API Gateway, Lambda, and DynamoDB
-4. Using Infrastructure as Code (IaC) for deployment
+3. Implementing a visitor counter with a Lambda Function URL, Lambda, and DynamoDB
+4. Using Infrastructure as Code (IaC) and GitHub Actions for deployment
 
-The visitor counter section is already set up in the HTML and JavaScript to work with your AWS Lambda function.
+The visitor counter section is already set up in the HTML and JavaScript to work with your AWS Lambda Function URL.
+
+### Why use Lambda Function URL instead of API Gateway?
+
+For this project, a Lambda Function URL is the better fit because:
+
+- It is simpler to configure for a single public endpoint.
+- It removes the additional API Gateway setup and routing complexity.
+- It is ideal for a lightweight visitor counter on a static portfolio website.
+- It keeps the architecture easier to maintain while still providing a secure serverless endpoint.
+
+The counter logic also avoids duplicate counting by treating one IP address as one visit per day.
 
 ## How to Customize
 
@@ -64,43 +75,75 @@ The visitor counter section is already set up in the HTML and JavaScript to work
 
 ## Visitor Counter Implementation
 
-To fully implement the visitor counter for the Cloud Resume Challenge:
+To fully implement the visitor counter for this project:
 
-1. Create a DynamoDB table to store the visitor count
-2. Create a Lambda function to increment and retrieve the count
-3. Set up API Gateway to expose your Lambda function
-4. Update the `fetchVisitorCount()` function in `script.js` with your API endpoint
+1. Create a DynamoDB table named `cloudresume-visitors` with a partition key of `id`.
+2. Create a Lambda function that reads the current visitor count and updates it.
+3. Create a Lambda Function URL and use it from the frontend.
+4. Update the visitor counter fetch logic in `script.js` to call your Lambda Function URL.
+
+### Counting rule
+
+The counter is designed so that one IP address is counted only once per day. This prevents duplicate counting from repeated visits from the same network.
 
 Example Lambda function (Python):
 
 ```python
 import json
 import boto3
+import time
 
 # Initialize DynamoDB resource
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("cloudresume-visitors")
 
-# Reference the specific DynamoDB table
-table = dynamodb.Table('cloudresumechallenge-table')
 
 def lambda_handler(event, context):
-    # Use update_item with expression attribute names to avoid reserved keyword issue
+    request_context = event.get("requestContext", {})
+    http_context = request_context.get("http", {})
+    source_ip = http_context.get("sourceIp") or "unknown"
+    ip_key = f"ip:{source_ip}"
+
+    existing = table.get_item(Key={"id": ip_key})
+    now = int(time.time())
+
+    if "Item" in existing:
+        item = existing["Item"]
+        last_seen = item.get("last_seen", 0)
+
+        if now - last_seen < 24 * 60 * 60:
+            counter_item = table.get_item(Key={"id": "counter"})
+            count = int(counter_item.get("Item", {}).get("count", 0))
+
+            return {
+                "statusCode": 200,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                "body": json.dumps({"count": count})
+            }
+
+    table.put_item(Item={"id": ip_key, "last_seen": now})
+
     response = table.update_item(
-        Key={'id': '1'},
-        UpdateExpression='SET #v = #v + :inc',
-        ExpressionAttributeNames={'#v': 'views'},  # Use #v to represent the reserved keyword 'views'
-        ExpressionAttributeValues={':inc': 1},
-        ReturnValues='UPDATED_NEW'
+        Key={"id": "counter"},
+        UpdateExpression="SET #c = if_not_exists(#c, :zero) + :inc",
+        ExpressionAttributeNames={"#c": "count"},
+        ExpressionAttributeValues={":zero": 0, ":inc": 1},
+        ReturnValues="UPDATED_NEW"
     )
-    
-    # Extract the updated view count
-    updated_views = response['Attributes']['views']
-    
-    # Print the new count (for logging)
-    print(updated_views)
-    
-    # Return the updated view count
-    return updated_views
+
+    count = int(response["Attributes"]["count"])
+
+    return {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "body": json.dumps({"count": count})
+    }
 ```
 
 ## Deployment
@@ -115,20 +158,25 @@ To deploy this website as part of the Cloud Resume Challenge:
 
 ### Automated Deployment with GitHub Actions
 
-This project includes a GitHub Actions workflow that automatically deploys changes to AWS S3 whenever you push to the main branch:
+This project can be deployed with GitHub Actions using AWS OIDC and STS role assumption instead of long-lived access keys.
 
-1. The workflow uses Jake Jarvis's S3 sync action to efficiently sync files to S3
-2. It sets appropriate cache control headers for optimal performance
-3. It creates a CloudFront invalidation to ensure changes are immediately visible
+1. The workflow uses AWS OIDC to authenticate securely with GitHub Actions.
+2. It assumes an IAM role through AWS STS, which avoids storing static access keys in GitHub secrets.
+3. It syncs the static site files to S3 and invalidates the CloudFront distribution so updates appear quickly.
 
 To set up the GitHub Actions workflow:
 
-1. Add the following secrets to your GitHub repository:
-   - `AWS_ACCESS_KEY_ID`: Your AWS access key with S3 and CloudFront permissions
-   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
+1. Create an OIDC provider in AWS IAM for GitHub Actions.
+2. Create an IAM role that trusts your GitHub repository and allows S3 and CloudFront permissions.
+3. Add the following repository variables or secrets:
+   - `AWS_REGION`: Your AWS region
+   - `ARN_ROLE`: The ARN of the IAM role created for GitHub Actions
+   - `S3_BUCKET_NAME`: Your S3 bucket name
    - `CLOUDFRONT_DISTRIBUTION_ID`: Your CloudFront distribution ID (if using CloudFront)
 
-2. Push changes to the main branch to trigger the deployment
+4. Push changes to the main branch to trigger the deployment.
+
+Using OIDC and STS is preferred because it is more secure than storing `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in GitHub.
 
 ## Technologies Used
 
@@ -178,7 +226,7 @@ Created as part of the Cloud Resume Challenge. Feel free to use and modify for y
                                                                     v
 +----------------+            +----------------+            +----------------+
 |                |            |                |            |                |
-|  DynamoDB      +<-----------+  Lambda        +<-----------+  API Gateway   |
+|  DynamoDB      +<-----------+  Lambda        +<-----------+ Function URL   |
 |  Database      |            |  Function      |            |                |
 |                |            |                |            |                |
 +----------------+            +----------------+            +----------------+

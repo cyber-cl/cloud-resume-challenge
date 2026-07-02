@@ -218,27 +218,33 @@ function initVisitorCounter() {
 
     el.textContent = '...';
 
-    fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws')
-        .then(res => {
+    fetch('https://e2emkln44huherudj2txqizlba0udyup.lambda-url.us-east-1.on.aws', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+        .then(async (res) => {
             if (!res.ok) throw new Error('Network error');
-            return res.json();
-        })
-        .then(data => {
-            let count;
-            if (typeof data === 'object' && data !== null) {
-                count = data.count || data.visitorCount || data.visitors || data.value;
-                if (count === undefined && data.body) {
-                    try {
-                        const body = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-                        count = body.count || body.visitorCount || body.visitors || body.value;
-                    } catch (e) { /* ignore */ }
-                }
-            } else {
-                count = data;
+
+            const contentType = res.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                return res.json();
             }
 
-            count = Number(count);
-            if (isNaN(count) || count < 1) count = 1;
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { count: Number(text) || 1 };
+            }
+        })
+        .then(data => {
+            const payload = typeof data === 'string' ? JSON.parse(data) : data;
+            const rawCount = payload?.count ?? payload?.visitorCount ?? payload?.visitors ?? payload?.value ?? payload?.body ?? payload;
+
+            let count = Number(rawCount);
+            if (Number.isNaN(count) || count < 1) count = 1;
 
             animateCount(el, count);
         })
