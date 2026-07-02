@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prashant Jakhar</title>
+    <title>Prasant Jakhar</title>
+    <meta name="description"
+        content="Prashant Jakhar — Cloud Engineer, DevOps Enthusiast, and AWS Certified Solutions Architect. Explore projects, experience, and connect.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <script src="script.js" defer></script>
 </head>
+
 <body>
     <div class="container">
         <!-- Navigation -->
         <nav id="navbar">
             <div class="logo">
-                <a href="#home"><h1>Prashant Jakhar</h1></a>
+                <a href="#home">
+                    <h1>Prasant Jakhar</h1>
+                </a>
             </div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
@@ -37,18 +44,43 @@
         </nav>
 
         <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1 class="typing-text">Welcome to my Cloud Resume Challenge Portfolio Website</h1>
-                <p>Cloud Engineer | DevOps Enthusiast | Problem Solver</p>
-                <div class="cta-buttons">
-                    <a href="#projects" class="btn primary-btn">View Projects</a>
-                    <a href="https://cloudresumechallenge.dev/docs/the-challenge/aws" target="_blank" class="btn secondary-btn">Cloud Resume Challenge <i class="fas fa-external-link-alt"></i></a>
-                    <a href="#contact" class="btn secondary-btn">Contact Me</a>
+        <section id="home" class="hero-interactive">
+            <canvas id="hero-canvas"></canvas>
+            <div class="hero-container">
+                <div class="hero-content-interactive">
+                    <div class="tech-tag"><i class="fas fa-server"></i> Cloud & DevOps Infrastructure</div>
+                    <h1 class="animated-gradient-text">
+                        <span class="word">Crafting</span>
+                        <span class="word">Scalable</span>
+                        <span class="word">Cloud</span>
+                        <span class="word">&amp;</span>
+                        <span class="word">AI</span>
+                        <span class="word">Systems</span>
+                    </h1>
+                    <p class="hero-subtitle">Specialized in Cloud Infrastructure, DevOps Automation, MLOps, and
+                        AI-powered Cloud Operations.
+                        Building secure, scalable, and highly available systems using AWS and modern DevOps practices.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#projects" class="btn primary-btn">Explore Projects <i
+                                class="fas fa-arrow-right"></i></a>
+                        <a href="#contact" class="btn secondary-btn">Book Consultation <i
+                                class="fas fa-calendar-alt"></i></a>
+                    </div>
                 </div>
-            </div>
-            <div class="hero-image">
-                <img src="images/cloud-hero.svg" alt="Cloud Computing Illustration">
+                <div class="hero-terminal-container">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                            <span class="terminal-title">bash - developer@prashant:~</span>
+                        </div>
+                        <div class="terminal-body" id="terminal-output">
+                            <!-- Injected dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -57,24 +89,40 @@
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
                 <div class="about-image">
-                    <img src="images/profile-pic.png" alt="Profile Picture">
+                    <img src="images\MyPic.png" alt="Profile Picture">
                 </div>
                 <div class="about-text">
-                    <h3>Hi, I'm <span class="highlight">Prashant Jakhar</span></h3>
-                    <p>I'm a passionate Cloud Engineer with experience in designing, implementing, and managing cloud infrastructure. I recently completed the Cloud Resume Challenge to showcase my skills in cloud technologies.</p>
-                    <p>My journey in technology began with a strong foundation in IT fundamentals, and I've since specialized in cloud computing, focusing on AWS/Azure/GCP services, Infrastructure as Code, and DevOps practices.</p>
+                    <h3>Hi, I'm <span class="highlight">Prasant Jakhar</span></h3>
+                    <p>I'm a Cloud & DevOps Engineer passionate about building scalable, secure, and highly available
+                        cloud infrastructure. I specialize in AWS, Kubernetes, Docker, Terraform, and CI/CD, helping
+                        teams automate deployments and deliver reliable applications faster.</p>
+                    <p>I design cloud-native architectures, automate infrastructure with Infrastructure as Code, and
+                        build resilient deployment pipelines that scale effortlessly. I'm also exploring AI-powered
+                        DevOps, using AI to enhance deployments, automate operations, optimize cloud resources, and
+                        improve system reliability.
+
+                        I enjoy solving complex infrastructure challenges and building modern platforms that are
+                        automated, observable, and ready for production at any scale.</p>
                     <div class="about-details">
                         <div class="detail">
                             <i class="fas fa-graduation-cap"></i>
-                            <span>Bachelor's in Information Technology</span>
+                            <span>Bachelor's in IT</span>
                         </div>
                         <div class="detail">
                             <i class="fas fa-briefcase"></i>
-                            <span>3+ Years Experience</span>
+                            <span>4+ Years Experience</span>
                         </div>
                         <div class="detail">
                             <i class="fas fa-certificate"></i>
-                            <span>AWS Certified Solutions Architect </span>
+                            <span>4x AWS Certified</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-certificate"></i>
+                            <span>1x GCP Certified</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-eye"></i>
+                            <span>Visitor Count: <span id="visitor-count-value">1</span></span>
                         </div>
                     </div>
                     <a href="" class="btn primary-btn download-btn" download>Download Resume</a>
@@ -89,18 +137,25 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">
-                        <span>July 2021 - Present</span>
+                        <span>July 2021 - September 2025</span>
                     </div>
                     <div class="timeline-content">
-                        <h3>Cloud SME</h3>
+                        <h3>Subject Matter Expert - AWS</h3>
                         <h4><i class="fab fa-amazon" style="margin-right: 10px; color: #000000;"></i>Amazon</h4>
-                        <p>Lead cloud infrastructure design and implementation for internal clients, focusing on AWS services and infrastructure as code.</p>
+                        <p>Lead cloud infrastructure design and implementation for internal clients, focusing on AWS
+                            services and infrastructure as code.</p>
                         <ul class="experience-list">
                             <li>Designed and implemented serverless architectures reducing operational costs by 40%</li>
-                            <li>Led migration of legacy applications to containerized microservices using ECS and EKS</li>
+                            <li>Automated provisioning and configuration with AWS CloudFormation and Systems Manager
+                                (SSM), reducing manual efforts by 70%</li>
+                            <li>Automated infrastructure provisioning across dev, staging, and production using
+                                Terraform and CloudFormation.</li>
+                            <li>Implemented monitoring and alerting solutions using CloudWatch and Prometheus, achieving
+                                99.9% uptime</li>
+                            <li>Led migration of legacy applications to containerized microservices using ECS and EKS
+                            </li>
                             <li>Developed and maintained infrastructure as code templates for AWS services</li>
                             <li>Implemented CI/CD pipelines using GitHub Actions and AWS CodePipeline</li>
-                            <li>Automated infrastructure deployment with Terraform and CloudFormation</li>
                             <li>Managed AWS accounts and resources, including VPCs, IAM roles, and security groups</li>
                         </ul>
                         <div class="experience-tags">
@@ -135,7 +190,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>Programming Languages</h3>
                     <div class="skill-items">
@@ -153,7 +208,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>Operating Systems</h3>
                     <div class="skill-items">
@@ -167,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>Infrastructure as Code</h3>
                     <div class="skill-items">
@@ -185,21 +240,21 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>DevOps & CI/CD</h3>
                     <div class="skill-items">
-                        <div class="skill-item" data-skill="Docker">
-                            <i class="fab fa-docker"></i>
-                            <span>Docker</span>
-                        </div>
-                        <div class="skill-item" data-skill="Kubernetes">
-                            <i class="fas fa-dharmachakra"></i>
-                            <span>Kubernetes</span>
-                        </div>
                         <div class="skill-item" data-skill="Jenkins">
                             <i class="fas fa-infinity"></i>
                             <span>Jenkins</span>
+                        </div>
+                        <div class="skill-item" data-skill="GitHubActions">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub Actions</span>
+                        </div>
+                        <div class="skill-item" data-skill="ArgoCD">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>ArgoCD</span>
                         </div>
                         <div class="skill-item" data-skill="Git">
                             <i class="fab fa-git-alt"></i>
@@ -207,7 +262,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="skill-category">
                     <h3>Logging & Monitoring</h3>
                     <div class="skill-items">
@@ -225,6 +280,64 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="skill-category">
+                    <h3>Containerization</h3>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="Docker">
+                            <i class="fab fa-docker"></i>
+                            <span>Docker</span>
+                        </div>
+                        <div class="skill-item" data-skill="Kubernetes">
+                            <i class="fas fa-dharmachakra"></i>
+                            <span>Kubernetes</span>
+                        </div>
+                        <div class="skill-item" data-skill="ECS">
+                            <i class="fab fa-aws"></i>
+                            <span>Amazon ECS</span>
+                        </div>
+                        <div class="skill-item" data-skill="Helm">
+                            <i class="fas fa-anchor"></i>
+                            <span>Helm Charts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Networking & Content Delivery</h3>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="VPC">
+                            <i class="fas fa-network-wired"></i>
+                            <span>Amazon VPC</span>
+                        </div>
+                        <div class="skill-item" data-skill="Route53">
+                            <i class="fas fa-globe"></i>
+                            <span>Route 53</span>
+                        </div>
+                        <div class="skill-item" data-skill="CloudFront">
+                            <i class="fas fa-bolt"></i>
+                            <span>CloudFront</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Security & Identity</h3>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="IAM">
+                            <i class="fas fa-user-shield"></i>
+                            <span>AWS IAM</span>
+                        </div>
+                        <div class="skill-item" data-skill="KMS">
+                            <i class="fas fa-key"></i>
+                            <span>AWS KMS</span>
+                        </div>
+                        <div class="skill-item" data-skill="Shield">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>AWS Shield</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -234,14 +347,54 @@
             <div class="certifications-container">
                 <div class="certification-card">
                     <div class="certification-logo">
-                        <img src="images/aws-certified-solutions-architect-associate.png" alt="AWS Certified Solutions Architect">
+                        <img src="images/terr.png" alt="HashiCorp Certified: Terraform Associate">
+                    </div>
+                    <div class="certification-details">
+                        <h3>HashiCorp Certified: Terraform Associate</h3>
+                        <p class="certification-issuer">HashiCorp</p>
+                        <p class="certification-date">Issued: Jul 2024 · Expires: Jul 2027</p>
+                        <a href="https://www.credly.com/badges/8f222956-62fa-48ef-bfde-1d9c1eb53a79/public_url"
+                            class="btn small-btn" target="_blank">View Credential</a>
+                    </div>
+                </div>
+
+                <div class="certification-card">
+                    <div class="certification-logo">
+                        <img src="images/cloudops.png" alt="AWS Certified CloudOps Engineer - Associate">
+                    </div>
+                    <div class="certification-details">
+                        <h3>AWS Certified CloudOps Engineer - Associate</h3>
+                        <p class="certification-issuer">Amazon Web Services (AWS)</p>
+                        <p class="certification-date">Issued: June 2026 · Expires: June 2029</p>
+                        <a href="https://www.credly.com/badges/9a32e4b1-b1a2-4698-9170-6155e8d09a94/public_url"
+                            class="btn small-btn" target="_blank">View Credential</a>
+                    </div>
+                </div>
+
+                <div class="certification-card">
+                    <div class="certification-logo">
+                        <img src="images\dev.png" alt="AWS Certified Developer">
+                    </div>
+                    <div class="certification-details">
+                        <h3>AWS Certified Developer - Associate</h3>
+                        <p class="certification-issuer">Amazon Web Services (AWS)</p>
+                        <p class="certification-date">Issued: June 2025 · Expires: June 2028</p>
+                        <a href="https://www.credly.com/badges/46a1445b-823b-438d-bdae-5175178e92f5/public_url"
+                            class="btn small-btn" target="_blank">View Credential</a>
+                    </div>
+                </div>
+
+                <div class="certification-card">
+                    <div class="certification-logo">
+                        <img src="images/aws-certified-solutions-architect-associate.png"
+                            alt="AWS Certified Solutions Architect">
                     </div>
                     <div class="certification-details">
                         <h3>AWS Certified Solutions Architect - Associate</h3>
                         <p class="certification-issuer">Amazon Web Services (AWS)</p>
                         <p class="certification-date">Issued: Jun 2024 · Expires: Jun 2027</p>
-                        <p class="certification-description">Validates the ability to design and implement distributed systems on AWS.</p>
-                        <a href="https://www.credly.com/badges/45e48dbd-ba43-43f7-a3f4-f9bbb60a5f02/public_url" class="btn small-btn" target="_blank">View Credential</a>
+                        <a href="https://www.credly.com/badges/45e48dbd-ba43-43f7-a3f4-f9bbb60a5f02/public_url"
+                            class="btn small-btn" target="_blank">View Credential</a>
                     </div>
                 </div>
 
@@ -253,8 +406,8 @@
                         <h3>Associate Cloud Engineer</h3>
                         <p class="certification-issuer">Google</p>
                         <p class="certification-date">Issued: Dec 2024 · Expires: Dec 2027</p>
-                        <p class="certification-description">Validates the skills to implement, monitor, and maintain Google Cloud solutions.</p>
-                        <a href="https://www.credly.com/badges/74787f60-ad55-46e9-b3a7-03682e66d9e8" class="btn small-btn" target="_blank">View Credential</a>
+                        <a href="https://www.credly.com/badges/74787f60-ad55-46e9-b3a7-03682e66d9e8"
+                            class="btn small-btn" target="_blank">View Credential</a>
                     </div>
                 </div>
 
@@ -266,8 +419,8 @@
                         <h3>AWS Certified Cloud Practitioner</h3>
                         <p class="certification-issuer">Amazon Web Services (AWS)</p>
                         <p class="certification-date">Issued: Feb 2024 · Expires: Feb 2027</p>
-                        <p class="certification-description">Validates the ability to design and implement distributed systems on AWS.</p>
-                        <a href="https://www.credly.com/badges/f2148073-7dfd-4743-baa9-1e3b0598ff46/public_url" class="btn small-btn" target="_blank">View Credential</a>
+                        <a href="https://www.credly.com/badges/f2148073-7dfd-4743-baa9-1e3b0598ff46/public_url"
+                            class="btn small-btn" target="_blank">View Credential</a>
                     </div>
                 </div>
             </div>
@@ -283,57 +436,80 @@
                 <button class="filter-btn" data-filter="devops">DevOps</button>
             </div>
             <div class="projects-grid">
+                <div class="project-card" data-category="azure devops">
+                    <div class="project-image">
+                        <img src="images/cicd-pipeline.svg" alt="CI/CD Pipeline Engine">
+                    </div>
+                    <div class="project-info">
+                        <h3>Custom CI/CD Pipeline Engine</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/cyber-cl" class="btn small-btn" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="devops">
+                    <div class="project-image">
+                        <img src="images/iac-templates.svg" alt="IaC Templates">
+                    </div>
+                    <div class="project-info">
+                        <h3>Modular Terraform Templates</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/cyber-cl" class="btn small-btn" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="aws">
+                    <div class="project-image">
+                        <img src="images/cloud-resume.svg" alt="Serverless API">
+                    </div>
+                    <div class="project-info">
+                        <h3>Serverless Visitor API</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/cyber-cl" class="btn small-btn" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="project-card" data-category="aws">
                     <div class="project-image">
                         <img src="images/2.png" alt="Cloud Resume Challenge">
                     </div>
                     <div class="project-info">
                         <h3>Cloud Resume Challenge</h3>
-                        <p>A serverless resume website built with AWS S3, CloudFront, Lambda, DynamoDB, and API Gateway.</p>
-                        <div class="project-tags">
-                            <span>AWS</span>
-                            <span>Serverless</span>
-                            <span>IaC</span>
-                        </div>
                         <div class="project-links">
-                            <a href="#" class="btn small-btn">View Demo</a>
-                            <a href="https://github.com/cyber-cl/cloud-resume-challenge" class="btn small-btn secondary-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            <a href="https://github.com/cyber-cl/cloud-resume-challenge" class="btn small-btn"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
+
                 <div class="project-card" data-category="azure devops">
                     <div class="project-image">
-                        <img src="images\output.jpg" alt="CI/CD Pipeline">
+                        <img src="images/output.jpg" alt="CI/CD Pipeline">
                     </div>
                     <div class="project-info">
-                        <h3>Microservices E-Commerce Application</h3>
-                        <p>Implemented a robust CI/CD pipeline for microservices using AWS DevOps and Docker.</p>
-                        <div class="project-tags">
-                            <span>Jenkins</span>
-                            <span>Docker</span>
-                            <span>DevOps</span>
-                        </div>
+                        <h3>Microservices E-Commerce App</h3>
                         <div class="project-links">
-                            <a href="#" class="btn small-btn">View Demo</a>
-                            <a href="https://github.com/cyber-cl/emartapp" class="btn small-btn secondary-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            <a href="https://github.com/cyber-cl/emartapp" class="btn small-btn" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
+
                 <div class="project-card" data-category="aws devops">
                     <div class="project-image">
-                        <img src="images/netflix-logo.webp" alt="Infrastructure as Code">
+                        <img src="images/netflix-logo.webp" alt="Netflix Clone">
                     </div>
                     <div class="project-info">
-                        <h3>Netflix Clone using Kubernetes Cluster</h3>
-                        <p>Developed a scalable, high-performance Netflix clone using Kubernetes for container orchestration and GitHub for version control and CI, ensuring an immersive and reliable streaming experience.</p>
-                        <div class="project-tags">
-                            <span>Kubernetes</span>
-                            <span>Docker</span>
-                            <span>CloudFormation</span>
-                        </div>
+                        <h3>Netflix K8s Cluster Clone</h3>
                         <div class="project-links">
-                            <a href="#" class="btn small-btn">View Demo</a>
-                            <a href="https://github.com/cyber-cl/Netflix_Clone" class="btn small-btn secondary-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            <a href="https://github.com/cyber-cl/Netflix_Clone" class="btn small-btn" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -344,7 +520,8 @@
         <section id="blog" class="blog">
             <h2 class="section-title">My Blog</h2>
             <div class="blog-header">
-                <p class="blog-intro">I regularly write about cloud technologies, DevOps practices, and my journey in tech.</p>
+                <p class="blog-intro">I regularly write about cloud technologies, DevOps practices, and my journey in
+                    tech.</p>
                 <a href="https://jakharprasant.hashnode.dev" target="_blank" class="btn primary-btn blog-link">
                     <i class="fas fa-external-link-alt"></i> Visit My Hashnode Blog
                 </a>
@@ -357,8 +534,10 @@
                     <div class="blog-post-content">
                         <h3>Getting Started with AWS Lambda Functions</h3>
                         <p class="blog-post-date"><i class="far fa-calendar-alt"></i> May 15, 2023</p>
-                        <p class="blog-post-excerpt">Learn how to create and deploy your first serverless function using AWS Lambda and API Gateway.</p>
-                        <a href="https://yourusername.hashnode.dev/getting-started-with-aws-lambda" target="_blank" class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-post-excerpt">Learn how to create and deploy your first serverless function using
+                            AWS Lambda and API Gateway.</p>
+                        <a href="https://yourusername.hashnode.dev/getting-started-with-aws-lambda" target="_blank"
+                            class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
 
@@ -369,8 +548,10 @@
                     <div class="blog-post-content">
                         <h3>Terraform Best Practices for Production Environments</h3>
                         <p class="blog-post-date"><i class="far fa-calendar-alt"></i> April 3, 2023</p>
-                        <p class="blog-post-excerpt">Discover the best practices for organizing and managing your Terraform code in production environments.</p>
-                        <a href="https://yourusername.hashnode.dev/terraform-best-practices" target="_blank" class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-post-excerpt">Discover the best practices for organizing and managing your
+                            Terraform code in production environments.</p>
+                        <a href="https://yourusername.hashnode.dev/terraform-best-practices" target="_blank"
+                            class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
 
@@ -381,76 +562,122 @@
                     <div class="blog-post-content">
                         <h3>My Journey Through the Cloud Resume Challenge</h3>
                         <p class="blog-post-date"><i class="far fa-calendar-alt"></i> March 10, 2023</p>
-                        <p class="blog-post-excerpt">A detailed walkthrough of my experience completing the Cloud Resume Challenge and the lessons learned.</p>
-                        <a href="https://yourusername.hashnode.dev/cloud-resume-challenge" target="_blank" class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        <p class="blog-post-excerpt">A detailed walkthrough of my experience completing the Cloud Resume
+                            Challenge and the lessons learned.</p>
+                        <a href="https://yourusername.hashnode.dev/cloud-resume-challenge" target="_blank"
+                            class="blog-post-link">Read Article <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
             <div class="blog-footer">
-                <a href="https://jakharprasant.hashnode.dev" target="_blank" class="btn secondary-btn">View All Articles</a>
+                <a href="https://jakharprasant.hashnode.dev" target="_blank" class="btn secondary-btn">View All
+                    Articles</a>
             </div>
         </section>
 
-        <!-- Visitor Counter Section -->
-        <section class="visitor-counter">
-            <div class="counter-container">
-                <p><i class="fas fa-eye"></i> <span class="count-label">Visitor count:</span> <span id="visitor-count-value">1</span></p>
-                <p class="counter-description">Implemented with AWS Lambda & DynamoDB</p>
-            </div>
-        </section>
 
-        <!-- Contact Section -->
+        <!-- Contact Section (Schedule a Call + Get In Touch side by side) -->
         <section id="contact" class="contact">
             <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <p>Feel free to reach out to me for job opportunities, collaborations, or just to say hello!</p>
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>prashantjakhar5@gmail.com</span>
+            <div class="contact-dual-container">
+                <!-- Schedule a Call -->
+                <div class="contact-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Schedule a Call</h3>
                     </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone"></i>
-                        <span>+91-6395358686</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Meerut, UP</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fab fa-linkedin"></i>
-                        <a href="https://www.linkedin.com/in/prasant-jakhar-44612418b/" target="_blank"><span>LinkedIn</span></a>
-                    </div>
-                    <div class="info-item">
-                        <i class="fab fa-github"></i>
-                        <a href="https://github.com/cyber-cl" target="_blank"><span>GitHub</span></a>
-                    </div>
-                    <div class="info-item">
-                        <i class="fa-brands fa-x-twitter"></i>
-                        <a href="https://x.com/Prashantjakha17" target="_blank"><span>X</span></a>
-                    </div>
+                    <p>Book a 30-minute call to discuss cloud architecture, DevOps practices, or collaboration
+                        opportunities.</p>
+                    <form id="booking-form" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                        <input type="hidden" name="subject" value="New Call Booking Request">
+                        <input type="hidden" name="from_name" value="Portfolio Booking Form">
+                        <div class="form-group">
+                            <label for="booking-name">Your Name</label>
+                            <input type="text" id="booking-name" name="name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-email">Your Email</label>
+                            <input type="email" id="booking-email" name="email" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-date">Preferred Date</label>
+                            <input type="date" id="booking-date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Time Slot</label>
+                            <div class="time-slots">
+                                <button type="button" class="time-slot" data-time="09:00">9:00 AM</button>
+                                <button type="button" class="time-slot" data-time="10:00">10:00 AM</button>
+                                <button type="button" class="time-slot" data-time="11:00">11:00 AM</button>
+                                <button type="button" class="time-slot" data-time="14:00">2:00 PM</button>
+                                <button type="button" class="time-slot" data-time="15:00">3:00 PM</button>
+                                <button type="button" class="time-slot" data-time="16:00">4:00 PM</button>
+                            </div>
+                            <input type="hidden" id="booking-time" name="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-topic">Topic</label>
+                            <input type="text" id="booking-topic" name="topic"
+                                placeholder="What would you like to discuss?">
+                        </div>
+                        <input type="hidden" name="redirect" value="">
+                        <button type="submit" class="btn primary-btn">Book Meeting</button>
+                    </form>
                 </div>
-                <div class="contact-form">
-                    <form id="contact-form">
+
+                <!-- Send a Message -->
+                <div class="contact-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Send a Message</h3>
+                    </div>
+                    <p>Feel free to reach out for job opportunities, collaborations, or just to say hello!</p>
+                    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                        <input type="hidden" name="subject" value="New Contact Message">
+                        <input type="hidden" name="from_name" value="Portfolio Contact Form">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="name" required placeholder="Your name">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email" required placeholder="you@example.com">
                         </div>
                         <div class="form-group">
                             <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" required>
+                            <input type="text" id="subject" name="subject" required placeholder="What's this about?">
                         </div>
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <textarea id="message" name="message" rows="5" required
+                                placeholder="Your message..."></textarea>
                         </div>
+                        <input type="hidden" name="redirect" value="">
                         <button type="submit" class="btn primary-btn">Send Message</button>
                     </form>
+                </div>
+            </div>
+
+            <!-- Contact Info Bar -->
+            <div class="contact-info-bar">
+                <div class="info-bar-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>prashantjakhar5@gmail.com</span>
+                </div>
+
+                <div class="info-bar-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Meerut, UP</span>
+                </div>
+                <div class="info-bar-socials">
+                    <a href="https://www.linkedin.com/in/prasant-jakhar-44612418b/" target="_blank" title="LinkedIn"><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/cyber-cl" target="_blank" title="GitHub"><i
+                            class="fab fa-github"></i></a>
+                    <a href="https://x.com/Prashantjakha17" target="_blank" title="X"><i
+                            class="fa-brands fa-x-twitter"></i></a>
                 </div>
             </div>
         </section>
@@ -459,8 +686,8 @@
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <h3>My Cloud Portfolio</h3>
-                    <p>Built as part of the Cloud Resume Challenge</p>
+                    <h3>Prashant Jakhar</h3>
+                    <p>Cloud Engineer & DevOps Enthusiast</p>
                 </div>
                 <div class="footer-links">
                     <h4>Quick Links</h4>
@@ -478,16 +705,17 @@
                 <div class="footer-newsletter">
                     <h4>Stay Updated</h4>
                     <p>Subscribe to my newsletter for the latest updates</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your Email">
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" placeholder="Your Email" required>
                         <button type="submit" class="btn small-btn">Subscribe</button>
                     </form>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Prashant Jakhar. All Rights Reserved.</p>
+                <p>&copy; 2025 Prasant Jakhar. All Rights Reserved.</p>
             </div>
         </footer>
     </div>
 </body>
-</html> 
+
+</html>

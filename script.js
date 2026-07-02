@@ -1,21 +1,44 @@
-// Wait for the DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Navigation functionality
+// ============================================
+// Portfolio — Main JavaScript
+// Static site — no backend required
+// Forms handled via Web3Forms
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+    initNavigation();
+    initHeroInteractive();
+    initScrollAnimations();
+    initProjectFiltering();
+    initVisitorCounter();
+    initBookingForm();
+    initContactForm();
+    initNewsletterForm();
+    initProfileImage();
+    setBookingMinDate();
+});
+
+// Add loaded class for page transitions
+window.addEventListener('load', () => document.body.classList.add('loaded'));
+
+// ============================================
+// NAVIGATION
+// ============================================
+
+function initNavigation() {
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
     const navLinks = document.querySelectorAll('.nav-links li');
     const navbar = document.querySelector('#navbar');
 
-    // Initialize visitor counter immediately
-    initVisitorCounter();
+    // Burger toggle
+    if (burger) {
+        burger.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            burger.classList.toggle('toggle');
+        });
+    }
 
-    // Toggle navigation menu
-    burger.addEventListener('click', () => {
-        nav.classList.toggle('active');
-        burger.classList.toggle('toggle');
-    });
-
-    // Close menu when clicking on a link
+    // Close menu on link click
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             nav.classList.remove('active');
@@ -25,576 +48,641 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
+        if (window.scrollY > 60) {
             navbar.classList.add('nav-scrolled');
         } else {
             navbar.classList.remove('nav-scrolled');
         }
     });
 
-    // Typing effect for hero heading
-    const typingText = document.querySelector('.typing-text');
-    if (typingText) {
-        const text = typingText.textContent;
-        typingText.textContent = '';
-        let i = 0;
-        
-        function typeWriter() {
-            if (i < text.length) {
-                typingText.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        }
-        
-        typeWriter();
-    }
-
-    // Animate timeline items in experience section
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    
-    function animateTimeline() {
-        timelineItems.forEach((item, index) => {
-            const itemPosition = item.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.2;
-            
-            if (itemPosition < screenPosition) {
-                setTimeout(() => {
-                    item.classList.add('animate-timeline');
-                }, index * 200);
-            }
-        });
-    }
-
-    // Add CSS for timeline animation
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .timeline-item {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease;
-        }
-        
-        .animate-timeline {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .timeline-item:nth-child(odd) {
-            transform: translateX(-50px);
-        }
-        
-        .timeline-item:nth-child(even) {
-            transform: translateX(50px);
-        }
-        
-        .animate-timeline:nth-child(odd),
-        .animate-timeline:nth-child(even) {
-            transform: translateX(0);
-        }
-
-        .certification-card {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-        
-        .animate-certification {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .blog-post {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-        
-        .animate-blog-post {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Animate certification cards
-    const certificationCards = document.querySelectorAll('.certification-card');
-    
-    function animateCertifications() {
-        certificationCards.forEach((card, index) => {
-            const cardPosition = card.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.2;
-            
-            if (cardPosition < screenPosition) {
-                setTimeout(() => {
-                    card.classList.add('animate-certification');
-                }, index * 200);
-            }
-        });
-    }
-
-    // Animate blog posts
-    const blogPosts = document.querySelectorAll('.blog-post');
-    
-    function animateBlogPosts() {
-        blogPosts.forEach((post, index) => {
-            const postPosition = post.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.2;
-            
-            if (postPosition < screenPosition) {
-                setTimeout(() => {
-                    post.classList.add('animate-blog-post');
-                }, index * 150);
-            }
-        });
-    }
-
-    // Animate skill progress bars when they come into view
-    function animateSkills() {
-        const skillItems = document.querySelectorAll('.skill-item');
-        const skillsSection = document.querySelector('.skills');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const progressBars = entry.target.querySelectorAll('.progress');
-                    progressBars.forEach(bar => {
-                        const width = bar.style.width;
-                        // First set width to 0
-                        bar.style.width = '0';
-                        // Then animate to the actual width
-                        setTimeout(() => {
-                            bar.style.transition = 'width 1.5s ease-in-out';
-                            bar.style.width = width;
-                        }, 100);
-                    });
-                    // Unobserve after animation
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        skillItems.forEach(item => {
-            observer.observe(item);
-        });
-    }
-
-    // Animate project cards on scroll
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    function animateProjects() {
-        projectCards.forEach((card, index) => {
-            const cardPosition = card.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.2;
-            
-            if (cardPosition < screenPosition) {
-                setTimeout(() => {
-                    card.classList.add('show');
-                }, index * 100);
-            }
-        });
-    }
-
-    // Project filtering
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterBtns.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            btn.classList.add('active');
-            
-            const filter = btn.getAttribute('data-filter');
-            
-            projectCards.forEach(card => {
-                // First hide all cards with animation
-                card.classList.remove('show');
-                
-                setTimeout(() => {
-                    // Show cards based on filter
-                    if (filter === 'all') {
-                        card.style.display = 'block';
-                    } else {
-                        const categories = card.getAttribute('data-category').split(' ');
-                        if (categories.includes(filter)) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    }
-                    
-                    // Re-animate visible cards
-                    if (card.style.display === 'block') {
-                        setTimeout(() => {
-                            card.classList.add('show');
-                        }, 50);
-                    }
-                }, 300);
-            });
-        });
-    });
-
-    // Animate counter digits
-    const counterDigits = document.querySelectorAll('.digit');
-    
-    function animateCounter() {
-        const counterPosition = document.querySelector('.counter').getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.2;
-        
-        if (counterPosition < screenPosition) {
-            counterDigits.forEach((digit, index) => {
-                setTimeout(() => {
-                    digit.classList.add('animate');
-                }, index * 200);
-            });
-        }
-    }
-
-    // Visitor counter functionality with Lambda integration
-    function initVisitorCounter() {
-        const visitorCountElement = document.getElementById('visitor-count-value');
-        if (!visitorCountElement) return;
-
-        // Set initial value
-        visitorCountElement.textContent = "Loading...";
-
-        // Fetch the visitor count
-        fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Raw visitor data:', data);
-                
-                // Extract count from various possible response formats
-                let count;
-                if (typeof data === 'object' && data !== null) {
-                    count = data.count || data.visitorCount || data.visitors || data.value;
-                    if (count === undefined && data.body) {
-                        // Try to parse body if it's a string
-                        try {
-                            const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-                            count = bodyData.count || bodyData.visitorCount || bodyData.visitors || bodyData.value;
-                        } catch (e) {
-                            console.error('Error parsing body:', e);
-                        }
-                    }
-                } else {
-                    count = data;
-                }
-                
-                // Ensure count is a number
-                count = Number(count);
-                if (isNaN(count) || count < 1) {
-                    count = 1;
-                }
-                
-                console.log('Processed count:', count);
-                
-                // Update the counter with animation
-                animateVisitorCount(count);
-            })
-            .catch(error => {
-                console.error('Error fetching visitor count:', error);
-                visitorCountElement.textContent = "1"; // Fallback value
-            });
-    }
-    
-    function animateVisitorCount(targetCount) {
-        const visitorCountElement = document.getElementById('visitor-count-value');
-        if (!visitorCountElement) return;
-        
-        // Clear any "Loading..." text
-        if (visitorCountElement.textContent === "Loading...") {
-            visitorCountElement.textContent = "1";
-        }
-        
-        const startCount = 1;
-        let currentCount = startCount;
-        
-        // Skip animation for small numbers
-        if (targetCount <= 5) {
-            visitorCountElement.textContent = targetCount;
-            return;
-        }
-        
-        const duration = 2000; // 2 seconds
-        const interval = 30; // Update every 30ms
-        const steps = duration / interval;
-        const increment = (targetCount - startCount) / steps;
-        
-        const timer = setInterval(() => {
-            currentCount += increment;
-            if (currentCount >= targetCount) {
-                clearInterval(timer);
-                currentCount = targetCount;
-            }
-            visitorCountElement.textContent = Math.floor(currentCount);
-        }, interval);
-    }
-
-    // Call fetchVisitorCount when the counter section is visible
-    const counterSection = document.querySelector('.visitor-counter');
-    let counterFetched = false;
-    
-    function checkCounterVisibility() {
-        if (!counterFetched && counterSection) {
-            const counterPosition = counterSection.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight;
-            
-            if (counterPosition < screenPosition) {
-                initVisitorCounter();
-                counterFetched = true;
-            }
-        }
-    }
-
-    // Form submission handling
-    const contactForm = document.getElementById('contact-form');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
-            // In a real implementation, you would send this data to your backend
-            // For demonstration, we'll just log it and show a success message
-            console.log('Form submitted:', { name, email, subject, message });
-            
-            // Show success message
-            const formGroups = document.querySelectorAll('.form-group');
-            formGroups.forEach(group => group.style.display = 'none');
-            
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
-            submitBtn.style.display = 'none';
-            
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <h3>Message Sent Successfully!</h3>
-                <p>Thank you for reaching out, ${name}. I'll get back to you soon.</p>
-            `;
-            
-            contactForm.appendChild(successMessage);
-            
-            // Reset form after 5 seconds
-            setTimeout(() => {
-                formGroups.forEach(group => group.style.display = 'block');
-                submitBtn.style.display = 'block';
-                successMessage.remove();
-                contactForm.reset();
-            }, 5000);
-        });
-    }
-
-    // Newsletter form submission
-    const newsletterForm = document.querySelector('.newsletter-form');
-    
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = newsletterForm.querySelector('input[type="email"]').value;
-            
-            // In a real implementation, you would send this to your backend
-            console.log('Newsletter subscription:', email);
-            
-            // Show success message
-            const originalContent = newsletterForm.innerHTML;
-            newsletterForm.innerHTML = `<p class="success">Thanks for subscribing!</p>`;
-            
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                newsletterForm.innerHTML = originalContent;
-            }, 3000);
-        });
-    }
-
-    // Smooth scrolling for anchor links
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
+            const href = this.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
+                // Custom offsets per section
+                const offsets = { '#home': -50, '#about': -35, '#experience': -35, '#skills': -35, '#certifications': -35, '#projects': -35, '#blog': -50, '#contact': -50 };
+                const offset = offsets[href] !== undefined ? offsets[href] : 100;
+
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: target.offsetTop - offset,
                     behavior: 'smooth'
                 });
             }
         });
     });
+}
 
-    // Call animation functions on scroll
-    window.addEventListener('scroll', () => {
-        animateTimeline();
-        animateCertifications();
-        animateBlogPosts();
-        animateSkills();
-        animateProjects();
-        animateCounter();
-        checkCounterVisibility();
-    });
+// ============================================
+// TYPING EFFECT
+// ============================================
 
-    // Initial call to animation functions
-    animateTimeline();
-    animateCertifications();
-    animateBlogPosts();
-    animateSkills();
-    animateProjects();
-    animateCounter();
-    checkCounterVisibility();
+function initTypingEffect() {
+    const el = document.querySelector('.typing-text');
+    if (!el) return;
 
-    // Add hover effect for skill items
-    const skillItems = document.querySelectorAll('.skill-item');
-    skillItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateY(-5px)';
-        });
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateY(0)';
-        });
-    });
-    
-    // Animate profile image
-    const profileImage = document.querySelector('.about-image');
-    if (profileImage) {
-        // Add initial animation class
-        profileImage.classList.add('animate');
-        
-        // Add interactive effects on mouse move
-        profileImage.addEventListener('mousemove', (e) => {
-            const { left, top, width, height } = profileImage.getBoundingClientRect();
-            const x = (e.clientX - left) / width - 0.5;
-            const y = (e.clientY - top) / height - 0.5;
-            
-            // Apply subtle rotation based on mouse position
-            profileImage.querySelector('img').style.transform = `
-                perspective(1000px) 
-                rotateY(${x * 10}deg) 
-                rotateX(${y * -10}deg) 
-                scale(1.05)
-            `;
-        });
-        
-        // Reset transform on mouse leave
-        profileImage.addEventListener('mouseleave', () => {
-            profileImage.querySelector('img').style.transform = 'scale(1)';
-        });
+    const text = el.textContent;
+    el.textContent = '';
+    let i = 0;
+
+    function type() {
+        if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, 60 + Math.random() * 40);
+        }
     }
-    
-    // Initialize visitor counter
-    const visitorCount = document.getElementById('visitor-count-value');
-    if (visitorCount) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !counterFetched) {
-                    initVisitorCounter();
-                    counterFetched = true;
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        observer.observe(document.querySelector('.visitor-counter'));
-    }
-});
 
-// Add a class to body when page is fully loaded
-window.addEventListener('load', function() {
-    document.body.classList.add('loaded');
-});
+    // Small delay before starting
+    setTimeout(type, 600);
+}
 
-// Navigation toggle
-const navSlide = () => {
-    const burger = document.querySelector('.burger');
-    const nav = document.querySelector('.nav-links');
-    const navLinks = document.querySelectorAll('.nav-links li');
-    
-    burger.addEventListener('click', () => {
-        // Toggle Nav
-        nav.classList.toggle('active');
-        
-        // Animate Links
-        navLinks.forEach((link, index) => {
-            if (link.style.animation) {
-                link.style.animation = '';
-            } else {
-                link.style.animation = `fadeIn 0.5s ease forwards ${index / 7 + 0.3}s`;
+// ============================================
+// SCROLL ANIMATIONS (IntersectionObserver)
+// ============================================
+
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+    };
+
+    // Timeline items
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('animate-timeline'), i * 150);
+                timelineObserver.unobserve(entry.target);
             }
         });
-        
-        // Burger Animation
-        burger.classList.toggle('toggle');
+    }, observerOptions);
+    timelineItems.forEach(item => timelineObserver.observe(item));
+
+    // Certification cards
+    const certCards = document.querySelectorAll('.certification-card');
+    const certObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('animate-certification'), i * 120);
+                certObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    certCards.forEach(card => certObserver.observe(card));
+
+    // Blog posts
+    const blogPosts = document.querySelectorAll('.blog-post');
+    const blogObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('animate-blog-post'), i * 100);
+                blogObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    blogPosts.forEach(post => blogObserver.observe(post));
+
+    // Project cards
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('show'), i * 100);
+                projectObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    projectCards.forEach(card => projectObserver.observe(card));
+
+    // Skill categories
+    const skillCategories = document.querySelectorAll('.skill-category');
+    const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                skillObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    skillCategories.forEach(cat => {
+        cat.style.opacity = '0';
+        cat.style.transform = 'translateY(20px)';
+        cat.style.transition = 'all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+        skillObserver.observe(cat);
     });
 }
 
-// Project filtering
-const filterProjects = () => {
+// ============================================
+// PROJECT FILTERING
+// ============================================
+
+function initProjectFiltering() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
-    
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterBtns.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
+            filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const filter = btn.getAttribute('data-filter');
-            
+
             projectCards.forEach(card => {
                 card.classList.remove('show');
-                
-                if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
-                    setTimeout(() => {
-                        card.classList.add('show');
-                    }, 100);
-                }
+
+                setTimeout(() => {
+                    const categories = card.getAttribute('data-category').split(' ');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        card.style.display = 'flex';
+                        setTimeout(() => card.classList.add('show'), 50);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }, 250);
             });
         });
     });
-    
-    // Show all projects initially
-    projectCards.forEach(card => {
-        card.classList.add('show');
-    });
 }
 
-// Sticky navigation
-const stickyNav = () => {
-    const navbar = document.getElementById('navbar');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('nav-scrolled');
-        } else {
-            navbar.classList.remove('nav-scrolled');
+// ============================================
+// VISITOR COUNTER (AWS Lambda)
+// ============================================
+
+function initVisitorCounter() {
+    const el = document.getElementById('visitor-count-value');
+    if (!el) return;
+
+    el.textContent = '...';
+
+    fetch('https://2esp5jhh75y4rskw6tq7blrszu0jtcdb.lambda-url.us-east-1.on.aws')
+        .then(res => {
+            if (!res.ok) throw new Error('Network error');
+            return res.json();
+        })
+        .then(data => {
+            let count;
+            if (typeof data === 'object' && data !== null) {
+                count = data.count || data.visitorCount || data.visitors || data.value;
+                if (count === undefined && data.body) {
+                    try {
+                        const body = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+                        count = body.count || body.visitorCount || body.visitors || body.value;
+                    } catch (e) { /* ignore */ }
+                }
+            } else {
+                count = data;
+            }
+
+            count = Number(count);
+            if (isNaN(count) || count < 1) count = 1;
+
+            animateCount(el, count);
+        })
+        .catch(() => {
+            el.textContent = '1';
+        });
+}
+
+function animateCount(el, target) {
+    if (target <= 5) {
+        el.textContent = target;
+        return;
+    }
+
+    let current = 0;
+    const duration = 1500;
+    const interval = 25;
+    const steps = duration / interval;
+    const increment = target / steps;
+
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            clearInterval(timer);
+            current = target;
+        }
+        el.textContent = Math.floor(current);
+    }, interval);
+}
+
+// ============================================
+// CONTACT FORM → Web3Forms
+// ============================================
+
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                showFormSuccess(form, submitBtn, originalText, formData.get('name'));
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (err) {
+            // Still show success to the user (message may have gone through)
+            showFormSuccess(form, submitBtn, originalText, formData.get('name'));
         }
     });
 }
 
-// Initialize all functions
-const app = () => {
-    navSlide();
-    animateSkills();
-    filterProjects();
-    stickyNav();
+function showFormSuccess(form, submitBtn, originalText, name) {
+    const groups = form.querySelectorAll('.form-group');
+    groups.forEach(g => g.style.display = 'none');
+    submitBtn.style.display = 'none';
+
+    const msg = document.createElement('div');
+    msg.className = 'success-message';
+    msg.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <h3>Message Sent!</h3>
+        <p>Thank you, ${name || 'friend'}. I'll get back to you soon.</p>
+    `;
+    form.appendChild(msg);
+
+    setTimeout(() => {
+        groups.forEach(g => g.style.display = 'block');
+        submitBtn.style.display = '';
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        msg.remove();
+        form.reset();
+    }, 4000);
 }
 
-// Run when DOM is loaded
-document.addEventListener('DOMContentLoaded', app);
+// ============================================
+// NEWSLETTER FORM (static)
+// ============================================
+
+function initNewsletterForm() {
+    const form = document.getElementById('newsletter-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const originalHTML = form.innerHTML;
+        form.innerHTML = `<p style="color: rgba(255,255,255,0.9); font-size: 0.92rem; padding: 8px 0;">✓ Thanks for subscribing!</p>`;
+
+        setTimeout(() => {
+            form.innerHTML = originalHTML;
+            // Re-attach listener after innerHTML reset
+            initNewsletterForm();
+        }, 3000);
+    });
+}
+
+// ============================================
+// BOOKING FORM → Web3Forms
+// ============================================
+
+function initBookingForm() {
+    const form = document.getElementById('booking-form');
+    if (!form) return;
+
+    // Time slot selection
+    const timeSlots = form.querySelectorAll('.time-slot');
+    const timeInput = document.getElementById('booking-time');
+
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            timeSlots.forEach(s => s.classList.remove('selected'));
+            slot.classList.add('selected');
+            timeInput.value = slot.getAttribute('data-time');
+        });
+    });
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!timeInput.value) {
+            alert('Please select a time slot.');
+            return;
+        }
+
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Booking...';
+        submitBtn.disabled = true;
+
+        const date = formData.get('date');
+        const time = timeInput.value;
+
+        try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                showBookingSuccess(form, date, time);
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (err) {
+            // Still show success to user
+            showBookingSuccess(form, date, time);
+        }
+
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
+}
+
+function showBookingSuccess(form, date, time) {
+    form.innerHTML = `
+        <div class="success-message">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Meeting Request Sent!</h3>
+            <p>Requested for ${date} at ${formatTime(time)}.</p>
+            <p style="margin-top:8px;font-size:0.88rem;color:var(--text-tertiary);">I'll confirm the meeting via email shortly.</p>
+        </div>
+    `;
+}
+
+function formatTime(time24) {
+    const [h, m] = time24.split(':');
+    const hour = parseInt(h);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${m} ${ampm}`;
+}
+
+function setBookingMinDate() {
+    const dateInput = document.getElementById('booking-date');
+    if (dateInput) {
+        const today = new Date();
+        today.setDate(today.getDate() + 1); // Minimum: tomorrow
+        dateInput.min = today.toISOString().split('T')[0];
+    }
+}
+
+// ============================================
+// PROFILE IMAGE INTERACTION
+// ============================================
+
+function initProfileImage() {
+    const container = document.querySelector('.about-image');
+    if (!container) return;
+
+    container.classList.add('animate');
+
+    const img = container.querySelector('img');
+    if (!img) return;
+
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        img.style.transform = `
+            perspective(800px)
+            rotateY(${x * 8}deg)
+            rotateX(${y * -8}deg)
+            scale(1.03)
+        `;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+    });
+}
+
+// ============================================
+// INTERACTIVE HERO (Canvas Network + Terminal)
+// ============================================
+
+function initHeroInteractive() {
+    initCanvasNetwork();
+    initTerminalSimulation();
+}
+
+function initCanvasNetwork() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    const maxParticles = 55;
+    const connectionDistance = 110;
+    let mouse = { x: null, y: null, radius: 120 };
+
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        initParticles();
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 2 + 1.2;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Bounce off boundaries
+            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+
+            // Mouse interaction (gentle repulsion)
+            if (mouse.x !== null && mouse.y !== null) {
+                const dx = this.x - mouse.x;
+                const dy = this.y - mouse.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < mouse.radius) {
+                    const force = (mouse.radius - dist) / mouse.radius;
+                    this.x += (dx / dist) * force * 1.2;
+                    this.y += (dy / dist) * force * 1.2;
+                }
+            }
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 113, 227, 0.4)';
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        const count = Math.min(maxParticles, Math.floor((canvas.width * canvas.height) / 22000));
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function drawLines() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < connectionDistance) {
+                    const alpha = (1 - dist / connectionDistance) * 0.12;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(0, 113, 227, ${alpha})`;
+                    ctx.lineWidth = 0.7;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        drawLines();
+        requestAnimationFrame(animate);
+    }
+
+    // Event listeners
+    window.addEventListener('resize', resizeCanvas);
+    canvas.parentElement.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    });
+
+    canvas.parentElement.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    resizeCanvas();
+    animate();
+}
+
+function initTerminalSimulation() {
+    const output = document.getElementById('terminal-output');
+    if (!output) return;
+
+    const script = [
+        { type: 'command', text: 'terraform init' },
+        { type: 'info', text: 'Initializing the backend...' },
+        { type: 'info', text: 'Initializing provider plugins...' },
+        { type: 'success', text: '✔ Terraform has been successfully initialized!' },
+        { type: 'command', text: 'terraform apply -auto-approve' },
+        { type: 'info', text: 'aws_vpc.main: Creating...' },
+        { type: 'info', text: 'aws_dynamodb_table.visitor_counter: Creating...' },
+        { type: 'info', text: 'aws_lambda_function.counter_api: Creating...' },
+        { type: 'success', text: 'aws_vpc.main: Creation complete after 3s' },
+        { type: 'success', text: 'aws_dynamodb_table.visitor_counter: Creation complete after 2s' },
+        { type: 'success', text: 'aws_lambda_function.counter_api: Creation complete after 4s' },
+        { type: 'success', text: 'Apply complete! Resources: 3 added, 0 changed, 0 destroyed.' },
+        { type: 'command', text: 'python deploy_llm.py --model llama-3' },
+        { type: 'info', text: 'Loading LLM weights from HuggingFace cache...' },
+        { type: 'info', text: 'Loading model: [====================] 100%' },
+        { type: 'info', text: 'Optimizing KV Cache on NVIDIA A100 GPU...' },
+        { type: 'success', text: '✔ LLM inference serving engine initialized!' },
+        { type: 'command', text: 'kubectl apply -f deployment.yaml' },
+        { type: 'success', text: 'deployment.apps/ai-model-serving created' },
+        { type: 'success', text: 'service/ai-inference-service created' },
+        { type: 'command', text: 'kubectl get pods -n production' },
+        { type: 'info', text: 'NAME                               READY  STATUS   RESTARTS  AGE\nai-model-serving-5f96b-x49v        1/1    Running  0         4s\nvisitor-counter-app-1234b-abcd     1/1    Running  0         4s' },
+        { type: 'success', text: '\n✔ Deployment active! AI services online at https://prashant.dev' }
+    ];
+
+    let lineIndex = 0;
+
+    function printNextLine() {
+        if (!document.getElementById('terminal-output')) return; // guard if route/page changes
+
+        if (lineIndex >= script.length) {
+            setTimeout(() => {
+                if (!output) return;
+                output.innerHTML = '';
+                lineIndex = 0;
+                printNextLine();
+            }, 6000);
+            return;
+        }
+
+        const line = script[lineIndex];
+        const lineEl = document.createElement('div');
+        lineEl.className = 'terminal-line';
+
+        if (line.type === 'command') {
+            const promptSpan = document.createElement('span');
+            promptSpan.style.color = '#8b949e';
+            promptSpan.textContent = 'developer@prashant:~$ ';
+            lineEl.appendChild(promptSpan);
+
+            const cmdSpan = document.createElement('span');
+            cmdSpan.className = 'terminal-command';
+            lineEl.appendChild(cmdSpan);
+
+            // Typewriter effect for commands
+            let charIndex = 0;
+            const cmdText = line.text;
+            const typeTimer = setInterval(() => {
+                if (!document.getElementById('terminal-output')) {
+                    clearInterval(typeTimer);
+                    return;
+                }
+                if (charIndex < cmdText.length) {
+                    cmdSpan.textContent += cmdText.charAt(charIndex);
+                    charIndex++;
+                    output.scrollTop = output.scrollHeight;
+                } else {
+                    clearInterval(typeTimer);
+                    lineIndex++;
+                    setTimeout(printNextLine, 500);
+                }
+            }, 60);
+        } else {
+            const contentSpan = document.createElement('span');
+            if (line.type === 'success') contentSpan.className = 'terminal-success';
+            else if (line.type === 'warning') contentSpan.className = 'terminal-warning';
+            else if (line.type === 'error') contentSpan.className = 'terminal-error';
+            else contentSpan.className = 'terminal-info';
+
+            contentSpan.textContent = line.text;
+            lineEl.appendChild(contentSpan);
+            lineIndex++;
+            output.scrollTop = output.scrollHeight;
+            setTimeout(printNextLine, line.type === 'info' ? 200 : 700);
+        }
+
+        output.appendChild(lineEl);
+        output.scrollTop = output.scrollHeight;
+    }
+
+    printNextLine();
+}
