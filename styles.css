@@ -64,7 +64,12 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     letter-spacing: -0.04em;
     line-height: 1.15;
@@ -102,6 +107,7 @@ img {
 section {
     padding: 100px 0;
     position: relative;
+    scroll-margin-top: 80px;
 }
 
 /* Subtle section dividers */
@@ -366,12 +372,29 @@ section:last-of-type::after {
     display: inline-block;
 }
 
-.animated-gradient-text .word:nth-child(1) { animation-delay: 0s, 0.15s; }
-.animated-gradient-text .word:nth-child(2) { animation-delay: 0s, 0.35s; }
-.animated-gradient-text .word:nth-child(3) { animation-delay: 0s, 0.55s; }
-.animated-gradient-text .word:nth-child(4) { animation-delay: 0s, 0.75s; }
-.animated-gradient-text .word:nth-child(5) { animation-delay: 0s, 0.95s; }
-.animated-gradient-text .word:nth-child(6) { animation-delay: 0s, 1.15s; }
+.animated-gradient-text .word:nth-child(1) {
+    animation-delay: 0s, 0.15s;
+}
+
+.animated-gradient-text .word:nth-child(2) {
+    animation-delay: 0s, 0.35s;
+}
+
+.animated-gradient-text .word:nth-child(3) {
+    animation-delay: 0s, 0.55s;
+}
+
+.animated-gradient-text .word:nth-child(4) {
+    animation-delay: 0s, 0.75s;
+}
+
+.animated-gradient-text .word:nth-child(5) {
+    animation-delay: 0s, 0.95s;
+}
+
+.animated-gradient-text .word:nth-child(6) {
+    animation-delay: 0s, 1.15s;
+}
 
 @keyframes wordFadeIn {
     to {
@@ -381,9 +404,17 @@ section:last-of-type::after {
 }
 
 @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .hero-subtitle {
@@ -392,6 +423,13 @@ section:last-of-type::after {
     color: var(--text-secondary);
     margin-bottom: 36px;
     max-width: 580px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
 }
 
 .hero-terminal-container {
@@ -435,9 +473,17 @@ section:last-of-type::after {
     margin-right: 6px;
 }
 
-.terminal-dot.red { background: #ff5f56; }
-.terminal-dot.yellow { background: #ffbd2e; }
-.terminal-dot.green { background: #27c93f; }
+.terminal-dot.red {
+    background: #ff5f56;
+}
+
+.terminal-dot.yellow {
+    background: #ffbd2e;
+}
+
+.terminal-dot.green {
+    background: #27c93f;
+}
 
 .terminal-title {
     flex-grow: 1;
@@ -462,11 +508,26 @@ section:last-of-type::after {
     white-space: pre-wrap;
 }
 
-.terminal-command { color: #58a6ff; font-weight: bold; }
-.terminal-success { color: #57ab5a; }
-.terminal-info { color: #8b949e; }
-.terminal-warning { color: #d29922; }
-.terminal-error { color: #f85149; }
+.terminal-command {
+    color: #58a6ff;
+    font-weight: bold;
+}
+
+.terminal-success {
+    color: #57ab5a;
+}
+
+.terminal-info {
+    color: #8b949e;
+}
+
+.terminal-warning {
+    color: #d29922;
+}
+
+.terminal-error {
+    color: #f85149;
+}
 
 /* Responsive styles */
 @media (max-width: 992px) {
@@ -476,13 +537,16 @@ section:last-of-type::after {
         gap: 40px;
         text-align: center;
     }
+
     .hero-content-interactive {
         align-items: center;
     }
+
     .hero-subtitle {
         margin-left: auto;
         margin-right: auto;
     }
+
     .terminal-window {
         height: 320px;
         max-width: 550px;
@@ -538,8 +602,15 @@ section:last-of-type::after {
 }
 
 @keyframes subtleGlow {
-    0%, 100% { box-shadow: var(--shadow-lg); }
-    50% { box-shadow: 0 16px 48px rgba(0, 113, 227, 0.12); }
+
+    0%,
+    100% {
+        box-shadow: var(--shadow-lg);
+    }
+
+    50% {
+        box-shadow: 0 16px 48px rgba(0, 113, 227, 0.12);
+    }
 }
 
 .about-text {
@@ -851,40 +922,133 @@ section:last-of-type::after {
 }
 
 /* Brand-specific colors */
-.skill-item[data-skill="AWS"] i { color: #FF9900; }
-.skill-item[data-skill="Azure"] i { color: #0078D4; }
-.skill-item[data-skill="GCP"] i { color: #4285F4; }
-.skill-item[data-skill="Python"] i { color: #3776AB; }
-.skill-item[data-skill="Java"] i { color: #007396; }
-.skill-item[data-skill="Shell"] i { color: #4EAA25; }
-.skill-item[data-skill="Unix/Linux"] i { color: #FCC624; }
-.skill-item[data-skill="Windows"] i { color: #0078D6; }
-.skill-item[data-skill="Terraform"] i { color: #7B42BC; }
-.skill-item[data-skill="Docker"] i { color: #2496ED; }
-.skill-item[data-skill="Kubernetes"] i { color: #326CE5; }
-.skill-item[data-skill="Git"] i { color: #F05032; }
-.skill-item[data-skill="Grafana"] i { color: #F46800; }
-.skill-item[data-skill="Kibana"] i { color: #00BFB3; }
-.skill-item[data-skill="Prometheus"] i { color: #E6522C; }
-.skill-item[data-skill="Jenkins"] i { color: #D24939; }
-.skill-item[data-skill="CloudFormation"] i { color: #FF9900; }
-.skill-item[data-skill="Ansible"] i { color: #EE0000; }
-.skill-item[data-skill="DynamoDB"] i { color: #4053D6; }
-.skill-item[data-skill="RDS"] i { color: #527FFF; }
-.skill-item[data-skill="S3"] i { color: #E05243; }
-.skill-item[data-skill="VPC"] i { color: #FF9900; }
-.skill-item[data-skill="Route53"] i { color: #2F80ED; }
-.skill-item[data-skill="CloudFront"] i { color: #FF9900; }
-.skill-item[data-skill="IAM"] i { color: #2E7D32; }
-.skill-item[data-skill="KMS"] i { color: #FBC02D; }
-.skill-item[data-skill="Shield"] i { color: #C62828; }
-.skill-item[data-skill="ECS"] i { color: #FF9900; }
-.skill-item[data-skill="Helm"] i { color: #0F2C59; }
-.skill-item[data-skill="GitHubActions"] i { color: #24292e; }
-.skill-item[data-skill="ArgoCD"] i { color: #EF7B45; }
+.skill-item[data-skill="AWS"] i {
+    color: #FF9900;
+}
+
+.skill-item[data-skill="Azure"] i {
+    color: #0078D4;
+}
+
+.skill-item[data-skill="GCP"] i {
+    color: #4285F4;
+}
+
+.skill-item[data-skill="Python"] i {
+    color: #3776AB;
+}
+
+.skill-item[data-skill="Java"] i {
+    color: #007396;
+}
+
+.skill-item[data-skill="Shell"] i {
+    color: #4EAA25;
+}
+
+.skill-item[data-skill="Unix/Linux"] i {
+    color: #FCC624;
+}
+
+.skill-item[data-skill="Windows"] i {
+    color: #0078D6;
+}
+
+.skill-item[data-skill="Terraform"] i {
+    color: #7B42BC;
+}
+
+.skill-item[data-skill="Docker"] i {
+    color: #2496ED;
+}
+
+.skill-item[data-skill="Kubernetes"] i {
+    color: #326CE5;
+}
+
+.skill-item[data-skill="Git"] i {
+    color: #F05032;
+}
+
+.skill-item[data-skill="Grafana"] i {
+    color: #F46800;
+}
+
+.skill-item[data-skill="Kibana"] i {
+    color: #00BFB3;
+}
+
+.skill-item[data-skill="Prometheus"] i {
+    color: #E6522C;
+}
+
+.skill-item[data-skill="Jenkins"] i {
+    color: #D24939;
+}
+
+.skill-item[data-skill="CloudFormation"] i {
+    color: #FF9900;
+}
+
+.skill-item[data-skill="Ansible"] i {
+    color: #EE0000;
+}
+
+.skill-item[data-skill="DynamoDB"] i {
+    color: #4053D6;
+}
+
+.skill-item[data-skill="RDS"] i {
+    color: #527FFF;
+}
+
+.skill-item[data-skill="S3"] i {
+    color: #E05243;
+}
+
+.skill-item[data-skill="VPC"] i {
+    color: #FF9900;
+}
+
+.skill-item[data-skill="Route53"] i {
+    color: #2F80ED;
+}
+
+.skill-item[data-skill="CloudFront"] i {
+    color: #FF9900;
+}
+
+.skill-item[data-skill="IAM"] i {
+    color: #2E7D32;
+}
+
+.skill-item[data-skill="KMS"] i {
+    color: #FBC02D;
+}
+
+.skill-item[data-skill="Shield"] i {
+    color: #C62828;
+}
+
+.skill-item[data-skill="ECS"] i {
+    color: #FF9900;
+}
+
+.skill-item[data-skill="Helm"] i {
+    color: #0F2C59;
+}
+
+.skill-item[data-skill="GitHubActions"] i {
+    color: #24292e;
+}
+
+.skill-item[data-skill="ArgoCD"] i {
+    color: #EF7B45;
+}
 
 /* Hidden progress bar legacy */
-.skill-progress, .progress {
+.skill-progress,
+.progress {
     display: none;
 }
 
@@ -1343,7 +1507,7 @@ section:last-of-type::after {
     letter-spacing: -0.02em;
 }
 
-.contact-panel > p {
+.contact-panel>p {
     margin-bottom: 24px;
     font-size: 0.95rem;
     color: var(--text-secondary);
@@ -1354,7 +1518,7 @@ section:last-of-type::after {
 .contact-info-bar {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 32px;
     flex-wrap: wrap;
     max-width: 1100px;
@@ -1369,16 +1533,28 @@ section:last-of-type::after {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .info-bar-item i {
     font-size: 1rem;
     color: var(--accent);
+    transition: transform var(--transition-fast);
 }
 
 .info-bar-item span {
     font-size: 0.92rem;
     color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+a.info-bar-item:hover i {
+    transform: scale(1.1);
+}
+
+a.info-bar-item:hover span {
+    color: var(--accent);
 }
 
 .info-bar-socials {
@@ -1453,10 +1629,21 @@ section:last-of-type::after {
 }
 
 /* Specific icon colors */
-.info-item i.fas { color: var(--text-tertiary); }
-.info-item i.fab.fa-linkedin { color: #0077b5; }
-.info-item i.fab.fa-github { color: var(--primary); }
-.info-item i.fa-brands.fa-x-twitter { color: var(--primary); }
+.info-item i.fas {
+    color: var(--text-tertiary);
+}
+
+.info-item i.fab.fa-linkedin {
+    color: #0077b5;
+}
+
+.info-item i.fab.fa-github {
+    color: var(--primary);
+}
+
+.info-item i.fa-brands.fa-x-twitter {
+    color: var(--primary);
+}
 
 /* ============================================
    CONTACT FORM
@@ -1555,7 +1742,8 @@ section:last-of-type::after {
     color: var(--text-secondary);
 }
 
-.time-slot:hover, .time-slot.selected {
+.time-slot:hover,
+.time-slot.selected {
     background: var(--accent);
     color: #ffffff;
     border-color: var(--accent);
@@ -1786,6 +1974,7 @@ section:last-of-type::after {
         opacity: 0;
         transform: translateY(24px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1793,13 +1982,27 @@ section:last-of-type::after {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes countUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .digit.animate {
@@ -1946,7 +2149,7 @@ section:last-of-type::after {
     .nav-links {
         position: absolute;
         right: 0;
-        top: 60px;
+        top: 100%;
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -2030,6 +2233,12 @@ section:last-of-type::after {
         max-width: 220px;
         border-radius: 24px;
     }
+
+    .contact-info-bar {
+        padding: 20px 24px;
+        border-radius: 24px;
+        gap: 20px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -2074,6 +2283,15 @@ section:last-of-type::after {
 
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .contact-info-bar {
+        padding: 16px;
+        border-radius: 16px;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
     }
 }
 
