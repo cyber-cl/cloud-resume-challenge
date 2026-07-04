@@ -287,6 +287,9 @@ function initContactForm() {
         e.preventDefault();
 
         const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Sending...';
@@ -295,19 +298,26 @@ function initContactForm() {
         try {
             const res = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
             });
 
             const result = await res.json();
 
-            if (result.success) {
+            if (res.status === 200 || result.success) {
                 showFormSuccess(form, submitBtn, originalText, formData.get('name'));
             } else {
-                throw new Error('Submission failed');
+                console.error('Submission failed:', result);
+                throw new Error(result.message || 'Submission failed');
             }
         } catch (err) {
-            // Still show success to the user (message may have gone through)
-            showFormSuccess(form, submitBtn, originalText, formData.get('name'));
+            console.error(err);
+            alert('Something went wrong. Please try again later.');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
 }
@@ -387,7 +397,8 @@ function initBookingForm() {
         }
 
         const formData = new FormData(form);
-        formData.append('access_key', '435dc20a-b900-4fe2-9b89-72e694f582ca');
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
 
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
@@ -400,23 +411,27 @@ function initBookingForm() {
         try {
             const res = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
             });
 
             const result = await res.json();
 
-            if (result.success) {
+            if (res.status === 200 || result.success) {
                 showBookingSuccess(form, date, time);
             } else {
-                throw new Error('Submission failed');
+                console.error('Submission failed:', result);
+                throw new Error(result.message || 'Submission failed');
             }
         } catch (err) {
-            // Still show success to user
-            showBookingSuccess(form, date, time);
+            console.error(err);
+            alert('Something went wrong. Please try again later.');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
-
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
     });
 }
 
