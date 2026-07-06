@@ -681,7 +681,6 @@ section:last-of-type::after {
 
 .timeline {
     position: relative;
-    max-width: 900px;
     margin: 0 auto;
     padding: 0;
 }
@@ -839,7 +838,6 @@ section:last-of-type::after {
     border-radius: var(--radius);
     padding: 28px 20px;
     border: 1px solid var(--border);
-    transition: all var(--transition);
     margin-bottom: 0;
 }
 
@@ -847,6 +845,7 @@ section:last-of-type::after {
     border-color: var(--border-hover);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 .skill-category h3 {
@@ -2040,6 +2039,18 @@ a.info-bar-item:hover span {
 }
 
 .animate-blog-post {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Skill category animation (mirrors certification animation) */
+.skill-category {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all var(--transition-slow);
+}
+
+.animate-skill {
     opacity: 1 !important;
     transform: translateY(0) !important;
 }

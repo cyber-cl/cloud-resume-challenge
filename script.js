@@ -138,7 +138,7 @@ function initScrollAnimations() {
     const blogObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('animate-blog-post'), i * 100);
+                setTimeout(() => entry.target.classList.add('animate-blog-post'), i * 120);
                 blogObserver.unobserve(entry.target);
             }
         });
@@ -150,30 +150,24 @@ function initScrollAnimations() {
     const projectObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('show'), i * 100);
+                setTimeout(() => entry.target.classList.add('show'), i * 120);
                 projectObserver.unobserve(entry.target);
             }
         });
     }, observerOptions);
     projectCards.forEach(card => projectObserver.observe(card));
 
-    // Skill categories
+    // Skill categories — staggered fade-up, same as certifications
     const skillCategories = document.querySelectorAll('.skill-category');
     const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+        entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                setTimeout(() => entry.target.classList.add('animate-skill'), i * 120);
                 skillObserver.unobserve(entry.target);
             }
         });
     }, observerOptions);
-    skillCategories.forEach(cat => {
-        cat.style.opacity = '0';
-        cat.style.transform = 'translateY(20px)';
-        cat.style.transition = 'all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
-        skillObserver.observe(cat);
-    });
+    skillCategories.forEach(cat => skillObserver.observe(cat));
 }
 
 // ============================================
