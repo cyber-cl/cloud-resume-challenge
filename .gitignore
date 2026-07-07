@@ -31,5 +31,5 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Lambda deployment packages
+# Lambda deployment package
 terraform/lambda/*.zip
