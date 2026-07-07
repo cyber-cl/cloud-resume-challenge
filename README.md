@@ -291,7 +291,7 @@ This project implements the [AWS Cloud Resume Challenge](https://cloudresumechal
 
 **Official Requirement**: Point a custom domain name to the CloudFront distribution.
 
-**My Implementation**: Registered the domain `thedevopsproject.live` and configured Route 53 with:
+**My Implementation**: Registered the domain `prasantjakhar.xyz` and configured Route 53 with:
 - A record with Alias to CloudFront distribution
 - Proper DNS propagation settings
 - DNS health checks
