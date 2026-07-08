@@ -1,435 +1,300 @@
-# Cloud Resume Challenge Portfolio Website
+<div align="center">
 
-A modern, interactive portfolio website built with HTML, CSS, and JavaScript, designed specifically for the Cloud Resume Challenge.
+# ☁️ Cloud Resume Challenge — AWS Serverless Portfolio
 
-## Overview
+**A production-grade, fully serverless portfolio website — provisioned end-to-end with Terraform and deployed via a zero-credential GitHub Actions pipeline.**
 
-This portfolio website is designed to showcase your skills, projects, and experience as part of the [Cloud Resume Challenge](https://cloudresumechallenge.dev/). It features a clean, responsive design with interactive elements and a visitor counter that can be integrated with AWS services.
+[![Live Site](https://img.shields.io/badge/Live-prasantjakhar.xyz-0071e3?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)](https://prasantjakhar.xyz)
+[![Terraform](https://img.shields.io/badge/IaC-Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)](./terraform)
+[![AWS](https://img.shields.io/badge/Cloud-AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://aws.amazon.com)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](./.github/workflows/front-end-cicd.yml)
+[![Python](https://img.shields.io/badge/Lambda-Python%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](./terraform/lambda/visitor_counter.py)
 
-## Features
+*Built for the [Cloud Resume Challenge](https://cloudresumechallenge.dev/docs/the-challenge/aws/) — and then taken further.*
 
-- **Responsive Design**: Looks great on all devices, from mobile phones to desktop computers
-- **Interactive UI**: Smooth animations, transitions, and interactive elements
-- **Project Showcase**: Filterable project cards to highlight your cloud projects
-- **Enhanced Skills Section**: Visual representation of your technical skills with categories for Cloud Platforms, Programming Languages, Operating Systems, and DevOps Tools
-- **Certifications Display**: Grid layout to showcase your professional certifications
-- **Visitor Counter**: Integration with AWS Lambda and DynamoDB (as per Cloud Resume Challenge)
-- **Contact Form**: Ready-to-use contact form (requires backend integration)
-- **Modern Design**: Clean, professional look with customizable color scheme
-- **Blog Section**: Showcase your technical writing and knowledge sharing
+</div>
 
-## Recent Updates
+---
 
-- **Skills Section Enhancement**: Added new categories for Programming Languages (Python, Java, Shell Scripting) and Operating Systems (Unix/Linux, Windows)
-- **Interactive Elements**: Added hover effects and animations to skill categories and items
-- **Progress Bar Animation**: Skills now feature animated progress bars that fill when scrolled into view
-- **Visitor Counter**: Implemented a clean, minimalist design for the visitor counter with AWS Lambda & DynamoDB integration
-- **Responsive Improvements**: Enhanced mobile responsiveness across all sections
-- **Performance Optimization**: Improved loading times and animations
+## 📐 Architecture
 
-## Cloud Resume Challenge Integration
+```mermaid
+flowchart TB
+    subgraph Internet["🌍 Visitors"]
+        U["Browser<br/>(Desktop / Mobile)"]
+    end
 
-This website is specifically designed to work with the Cloud Resume Challenge, which involves:
+    subgraph DNS["Route 53 — DNS"]
+        R53["Hosted Zone<br/>prasantjakhar.xyz<br/>A + AAAA Alias Records<br/>(root + www, IPv4 + IPv6)"]
+    end
 
-1. Creating a static website hosted in an S3 bucket
-2. Setting up HTTPS with CloudFront
-3. Implementing a visitor counter with a Lambda Function URL, Lambda, and DynamoDB
-4. Using Infrastructure as Code (IaC) and GitHub Actions for deployment
+    subgraph Edge["CloudFront — Global Edge Network"]
+        CF["CloudFront Distribution<br/>HTTPS enforced · HTTP/2 · Brotli/Gzip<br/>PriceClass 100 (US·CA·EU)"]
+        ACM["ACM Certificate<br/>*.prasantjakhar.xyz<br/>TLS 1.2+ · DNS-validated"]
+    end
 
-The visitor counter section is already set up in the HTML and JavaScript to work with your AWS Lambda Function URL.
+    subgraph Origin["S3 — Private Origin"]
+        S3["S3 Bucket<br/>Static Site (HTML/CSS/JS)<br/>🔒 All public access blocked<br/>Versioning enabled"]
+        OAC["Origin Access Control<br/>SigV4-signed requests only"]
+    end
 
-### Why use Lambda Function URL instead of API Gateway?
+    subgraph Backend["Serverless Visitor Counter API"]
+        FURL["Lambda Function URL<br/>CORS locked to site domain"]
+        LAMBDA["AWS Lambda · Python 3.12<br/>128 MB · 10s timeout<br/>IP-based daily dedup logic"]
+        DDB[("DynamoDB<br/>PAY_PER_REQUEST<br/>Atomic counter + IP records<br/>TTL auto-cleanup (48h)")]
+        CW["CloudWatch Logs<br/>14-day retention"]
+    end
 
-For this project, a Lambda Function URL is the better fit because:
+    subgraph CICD["CI/CD — GitHub Actions"]
+        GH["GitHub Repository<br/>push to main"]
+        GHA["GitHub Actions Workflow"]
+        OIDC["AWS IAM OIDC Provider<br/>🔑 No stored credentials<br/>STS AssumeRoleWithWebIdentity"]
+        ROLE["Scoped IAM Deploy Role<br/>S3 sync + CF invalidation only"]
+    end
 
-- It is simpler to configure for a single public endpoint.
-- It removes the additional API Gateway setup and routing complexity.
-- It is ideal for a lightweight visitor counter on a static portfolio website.
-- It keeps the architecture easier to maintain while still providing a secure serverless endpoint.
+    subgraph IaC["Infrastructure as Code"]
+        TF["Terraform ~> AWS 5.x<br/>10 config files<br/>All resources declarative"]
+    end
 
-The counter logic also avoids duplicate counting by treating one IP address as one visit per day.
+    U -->|"1 · DNS lookup"| R53
+    R53 -->|"2 · Alias to CDN"| CF
+    ACM -.->|"TLS cert"| CF
+    U -->|"3 · HTTPS request"| CF
+    CF -->|"4 · Signed origin fetch"| OAC
+    OAC --> S3
+    U -->|"5 · GET /count (fetch API)"| FURL
+    FURL --> LAMBDA
+    LAMBDA -->|"GetItem / PutItem /<br/>atomic UpdateItem"| DDB
+    LAMBDA -.->|"structured logs"| CW
 
-## How to Customize
+    GH -->|"trigger"| GHA
+    GHA -->|"OIDC token exchange"| OIDC
+    OIDC -->|"short-lived STS creds"| ROLE
+    ROLE -->|"aws s3 sync"| S3
+    ROLE -->|"create-invalidation"| CF
 
-### Personal Information
+    TF -.->|"provisions"| R53 & CF & ACM & S3 & FURL & LAMBDA & DDB & CW & OIDC & ROLE
 
-1. Edit the `index.html` file to update:
-   - Your name and personal details
-   - Skills and proficiency levels
-   - Project descriptions and links
-   - Contact information
-
-### Styling
-
-1. Modify the `styles.css` file to change:
-   - Color scheme (update the root variables)
-   - Fonts and typography
-   - Layout and spacing
-
-### Functionality
-
-1. Update the `script.js` file to:
-   - Connect the visitor counter to your actual AWS Lambda endpoint
-   - Customize animations and interactions
-   - Add additional JavaScript functionality
-
-## Visitor Counter Implementation
-
-To fully implement the visitor counter for this project:
-
-1. Create a DynamoDB table named `cloudresume-visitors` with a partition key of `id`.
-2. Create a Lambda function that reads the current visitor count and updates it.
-3. Create a Lambda Function URL and use it from the frontend.
-4. Update the visitor counter fetch logic in `script.js` to call your Lambda Function URL.
-
-### Counting rule
-
-The counter is designed so that one IP address is counted only once per day. This prevents duplicate counting from repeated visits from the same network.
-
-Example Lambda function (Python):
-
-```python
-import json
-import boto3
-import time
-
-# Initialize DynamoDB resource
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("cloudresume-visitors")
-
-
-def lambda_handler(event, context):
-    request_context = event.get("requestContext", {})
-    http_context = request_context.get("http", {})
-    source_ip = http_context.get("sourceIp") or "unknown"
-    ip_key = f"ip:{source_ip}"
-
-    existing = table.get_item(Key={"id": ip_key})
-    now = int(time.time())
-
-    if "Item" in existing:
-        item = existing["Item"]
-        last_seen = item.get("last_seen", 0)
-
-        if now - last_seen < 24 * 60 * 60:
-            counter_item = table.get_item(Key={"id": "counter"})
-            count = int(counter_item.get("Item", {}).get("count", 0))
-
-            return {
-                "statusCode": 200,
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
-                },
-                "body": json.dumps({"count": count})
-            }
-
-    table.put_item(Item={"id": ip_key, "last_seen": now})
-
-    response = table.update_item(
-        Key={"id": "counter"},
-        UpdateExpression="SET #c = if_not_exists(#c, :zero) + :inc",
-        ExpressionAttributeNames={"#c": "count"},
-        ExpressionAttributeValues={":zero": 0, ":inc": 1},
-        ReturnValues="UPDATED_NEW"
-    )
-
-    count = int(response["Attributes"]["count"])
-
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-        },
-        "body": json.dumps({"count": count})
-    }
+    classDef aws fill:#232f3e,stroke:#ff9900,color:#fff,stroke-width:2px
+    classDef edge fill:#8C4FFF,stroke:#fff,color:#fff
+    classDef data fill:#3B48CC,stroke:#fff,color:#fff
+    classDef cicd fill:#2088FF,stroke:#fff,color:#fff
+    classDef iac fill:#844FBA,stroke:#fff,color:#fff
+    class R53,CF,ACM,S3,OAC,FURL,LAMBDA,CW aws
+    class DDB data
+    class GH,GHA,OIDC,ROLE cicd
+    class TF iac
 ```
 
-## Deployment
+### Visitor Counter — Request Lifecycle
 
-To deploy this website as part of the Cloud Resume Challenge:
+```mermaid
+sequenceDiagram
+    autonumber
+    participant B as Browser
+    participant F as Lambda Function URL
+    participant L as Lambda (Python 3.12)
+    participant D as DynamoDB
 
-1. Create an S3 bucket configured for static website hosting
-2. Upload all files to the S3 bucket
-3. Set up CloudFront distribution pointing to your S3 bucket
-4. Configure a custom domain with Route 53 (optional)
-5. Set up CI/CD pipeline for automated deployment (optional)
-
-### Automated Deployment with GitHub Actions
-
-This project can be deployed with GitHub Actions using AWS OIDC and STS role assumption instead of long-lived access keys.
-
-1. The workflow uses AWS OIDC to authenticate securely with GitHub Actions.
-2. It assumes an IAM role through AWS STS, which avoids storing static access keys in GitHub secrets.
-3. It syncs the static site files to S3 and invalidates the CloudFront distribution so updates appear quickly.
-
-To set up the GitHub Actions workflow:
-
-1. Create an OIDC provider in AWS IAM for GitHub Actions.
-2. Create an IAM role that trusts your GitHub repository and allows S3 and CloudFront permissions.
-3. Add the following repository variables or secrets:
-   - `AWS_REGION`: Your AWS region
-   - `ARN_ROLE`: The ARN of the IAM role created for GitHub Actions
-   - `S3_BUCKET_NAME`: Your S3 bucket name
-   - `CLOUDFRONT_DISTRIBUTION_ID`: Your CloudFront distribution ID (if using CloudFront)
-
-4. Push changes to the main branch to trigger the deployment.
-
-Using OIDC and STS is preferred because it is more secure than storing `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in GitHub.
-
-## Technologies Used
-
-- HTML5
-- CSS3 (with CSS variables, flexbox/grid layouts, and animations)
-- JavaScript (ES6+, Intersection Observer API for scroll animations)
-- Font Awesome for icons
-- Responsive design techniques
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## Credits
-
-Created as part of the Cloud Resume Challenge. Feel free to use and modify for your own portfolio!
-
-# Cloud Resume Challenge - AWS Implementation
-
-## Architecture Overview
-
-```ascii
-                                  +----------------+
-                                  |                |
-                                  |  GitHub Repo   |
-                                  |                |
-                                  +--------+-------+
-                                           |
-                                           | GitHub Actions
-                                           v
-                                  +----------------+
-                                  |                |
-                                  |  CI/CD Pipeline|
-                                  |                |
-                                  +--------+-------+
-                                           |
-                                           v
-+----------------+            +----------------+            +----------------+
-|                |            |                |            |                |
-|  Route 53      +----------->+  CloudFront    +----------->+  S3 Bucket     |
-|  DNS           |            |  CDN           |            |  Static Website|
-|                |            |                |            |                |
-+----------------+            +----------------+            +----------------+
-                                                                    ^
-                                                                    |
-                                                                    | API Calls
-                                                                    v
-+----------------+            +----------------+            +----------------+
-|                |            |                |            |                |
-|  DynamoDB      +<-----------+  Lambda        +<-----------+ Function URL   |
-|  Database      |            |  Function      |            |                |
-|                |            |                |            |                |
-+----------------+            +----------------+            +----------------+
+    B->>F: GET / (fetch on page load)
+    F->>L: Invoke with sourceIp in requestContext
+    L->>D: GetItem(id = "ip:<sourceIp>")
+    alt IP seen within last 24h
+        D-->>L: Item { last_seen }
+        L->>D: GetItem(id = "counter")
+        D-->>L: current count
+        L-->>B: 200 { count } — not incremented
+    else New IP or > 24h since last visit
+        L->>D: PutItem(ip record, last_seen = now, ttl = now+48h)
+        L->>D: UpdateItem(counter) — atomic SET count = if_not_exists(count,0) + 1
+        D-->>L: updated count
+        L-->>B: 200 { count } — incremented
+    end
+    Note over D: TTL auto-purges stale IP records<br/>— table never grows unbounded
 ```
 
-This project implements the [AWS Cloud Resume Challenge](https://cloudresumechallenge.dev/docs/the-challenge/aws/), a hands-on project designed to help you build and demonstrate your cloud skills. Below is a detailed comparison of each step from the official challenge and how I implemented it.
+### CI/CD — Zero-Credential Deployment
 
-## Challenge Steps Implementation
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Dev as Developer
+    participant GH as GitHub (main)
+    participant GA as GitHub Actions
+    participant STS as AWS STS / OIDC
+    participant S3 as S3 Bucket
+    participant CF as CloudFront
 
-### 1. Certification
+    Dev->>GH: git push
+    GH->>GA: Trigger workflow
+    GA->>STS: Present OIDC token (repo-scoped trust)
+    STS-->>GA: Short-lived credentials (no secrets stored 🔑)
+    GA->>S3: aws s3 sync --delete
+    GA->>CF: create-invalidation /*
+    CF-->>Dev: Fresh content live at the edge in ~seconds
+```
 
-**Official Requirement**: Obtain the AWS Cloud Practitioner certification.
+---
 
-**My Implementation**: Successfully obtained the AWS Certified Solutions Architect - Associate certification, which exceeds the minimum requirement of the Cloud Practitioner certification. This certification validates my ability to design and implement distributed systems on AWS.
+## ✨ Highlights
 
-### 2. HTML
+| | |
+|---|---|
+| 🔒 **Private-by-default origin** | S3 bucket blocks *all* public access; CloudFront reaches it exclusively through **Origin Access Control** (SigV4-signed requests) |
+| 🔑 **Zero stored cloud credentials** | CI/CD authenticates via **GitHub OIDC → STS AssumeRoleWithWebIdentity** — no `AWS_ACCESS_KEY_ID` anywhere |
+| ⚡ **API Gateway–free API** | A **Lambda Function URL** serves the counter — fewer moving parts, zero API Gateway cost, CORS locked to the site's domain |
+| 🧮 **Honest analytics** | The counter dedupes by IP with a 24-hour window using an **atomic DynamoDB update** — refresh-spamming doesn't inflate the count |
+| ♻️ **Self-cleaning data** | IP records carry a **DynamoDB TTL** (48 h) so the table stays tiny forever |
+| 🏗️ **100% Infrastructure as Code** | Every resource — DNS to IAM policy — is declared in **Terraform**; the whole stack rebuilds with one `terraform apply` |
+| 🌐 **IPv6 + HTTP/2 + compression** | Dual-stack DNS (A + AAAA), TLS 1.2+, Brotli/Gzip at the edge |
+| 💰 **Near-zero cost** | On-demand DynamoDB, 128 MB Lambda, PriceClass_100 CloudFront — runs comfortably in the free tier |
 
-**Official Requirement**: Create a resume in HTML format, not a Word doc or PDF.
+---
 
-**My Implementation**: Developed a responsive HTML resume from scratch, structured with semantic HTML5 elements for better accessibility and SEO. The HTML includes sections for:
-- Professional summary
-- Work experience
-- Skills
-- Certifications
-- Projects
-- Education
-- Contact information
+## 🗂️ Repository Structure
 
-### 3. CSS
+```
+cloud-resume-challenge/
+├── index.html                     # Single-page portfolio (semantic HTML5)
+├── styles.css                     # Design system — CSS variables, grid/flex, animations
+├── script.js                      # Visitor counter, canvas hero, forms, scroll FX
+├── images/                        # Optimized site assets
+├── .github/
+│   └── workflows/
+│       └── front-end-cicd.yml     # OIDC deploy: S3 sync + CloudFront invalidation
+└── terraform/
+    ├── main.tf                    # Providers, versions, (optional) S3 remote state
+    ├── variables.tf               # Inputs + common tag locals
+    ├── s3.tf                      # Private bucket, OAC policy, versioning
+    ├── cloudfront.tf              # Distribution, OAC, managed cache policies
+    ├── acm.tf                     # Wildcard cert + DNS validation
+    ├── route53.tf                 # Zone + A/AAAA aliases (root & www)
+    ├── dynamodb.tf                # On-demand table + TTL
+    ├── lambda.tf                  # Function, Function URL (CORS), log group
+    ├── iam.tf                     # Lambda role, OIDC provider, CI deploy role
+    ├── outputs.tf                 # URLs, ARNs, nameservers, role ARN
+    └── lambda/
+        └── visitor_counter.py     # Counter logic — IP dedup + atomic increment
+```
 
-**Official Requirement**: Style the resume with CSS.
+---
 
-**My Implementation**: Created a custom CSS stylesheet with:
-- Modern, responsive design using CSS Grid and Flexbox
-- Custom color scheme with CSS variables for easy theming
-- Animations and transitions for interactive elements
-- Mobile-first approach with media queries for different screen sizes
-- Smooth scrolling behavior for better user experience
+## 🧰 Technology Stack
 
-### 4. Static Website
+| Layer | Technology | Why |
+|---|---|---|
+| **Frontend** | HTML5 · CSS3 · Vanilla JS (ES6+) | Zero framework overhead; Intersection Observer scroll FX; canvas particle hero |
+| **Hosting** | S3 + CloudFront | Private origin, global edge caching, HTTPS everywhere |
+| **DNS / TLS** | Route 53 + ACM | Alias records (free lookups), auto-validated wildcard cert |
+| **API** | Lambda Function URL | Simpler + cheaper than API Gateway for a single endpoint |
+| **Compute** | AWS Lambda (Python 3.12 / boto3) | Scale-to-zero, pay-per-invoke |
+| **Database** | DynamoDB (on-demand) | Atomic counters, TTL cleanup, single-table design |
+| **IaC** | Terraform (AWS provider ~> 5.0) | Reproducible, reviewable, one-command rebuild |
+| **CI/CD** | GitHub Actions + OIDC | Keyless deploys with least-privilege IAM |
+| **Observability** | CloudWatch Logs (14-day retention) | Bounded log storage costs |
 
-**Official Requirement**: Deploy the HTML resume as an Amazon S3 static website.
+---
 
-**My Implementation**: Set up an S3 bucket configured for static website hosting with:
-- Proper bucket policies for public read access
-- Organized file structure for HTML, CSS, JavaScript, and assets
-- Configured index.html as the default document
-- Set up error handling with a custom 404 page
+## 🚀 Deploying It Yourself
 
-### 5. HTTPS
+### Prerequisites
+- AWS account + [Terraform ≥ 1.5](https://developer.hashicorp.com/terraform/install)
+- A registered domain (this project uses `prasantjakhar.xyz`)
 
-**Official Requirement**: Use Amazon CloudFront to enable HTTPS for security.
+### 1 · Provision the infrastructure
 
-**My Implementation**: Configured CloudFront distribution with:
-- SSL/TLS certificate from AWS Certificate Manager
-- HTTPS redirection from HTTP
-- Optimized cache settings for different content types
-- Custom error responses
-- Origin access identity for secure S3 access
+```bash
+cd terraform
+# Edit terraform.tfvars — domain_name, s3_bucket_name, github_repo, etc.
+terraform init
+terraform plan
+terraform apply
+```
 
-### 6. DNS
+### 2 · Point your registrar at Route 53
 
-**Official Requirement**: Point a custom domain name to the CloudFront distribution.
+```bash
+terraform output route53_nameservers   # set these at your domain registrar
+```
 
-**My Implementation**: Registered the domain `prasantjakhar.xyz` and configured Route 53 with:
-- A record with Alias to CloudFront distribution
-- Proper DNS propagation settings
-- DNS health checks
-- DNSSEC for additional security
+### 3 · Wire up CI/CD (repo secrets)
 
-### 7. JavaScript
+| Secret | Source |
+|---|---|
+| `AWS_ROLE_ARN` | `terraform output github_actions_role_arn` |
+| `S3_BUCKET_NAME` | `terraform output s3_bucket_name` |
+| `CLOUDFRONT_DISTRIBUTION_ID` | `terraform output cloudfront_distribution_id` |
 
-**Official Requirement**: Include a visitor counter using JavaScript.
+### 4 · Connect the counter
 
-**My Implementation**: Implemented a visitor counter with:
-- Asynchronous JavaScript to fetch and update the count
-- Clean UI integration with the rest of the resume
-- Loading state and error handling
-- Local storage to prevent multiple counts from the same session
-- Smooth animation for count updates
+```bash
+terraform output lambda_function_url   # paste into initVisitorCounter() in script.js
+```
 
-### 8. Database
+Push to `main` — the workflow syncs the site to S3 and invalidates the CloudFront cache. Done. 🎉
 
-**Official Requirement**: Use Amazon DynamoDB to store the visitor count.
+---
 
-**My Implementation**: Created a DynamoDB table with:
-- On-demand capacity mode for cost optimization
-- Single-item design pattern for the counter
-- Proper IAM permissions
-- TTL settings for any temporary data
-- Consistent reads for accurate counting
+## 🔐 Security Design
 
-### 9. API
+- **S3**: all four public-access blocks enabled; bucket policy grants `s3:GetObject` to CloudFront's service principal **only when** the request originates from *this* distribution (`AWS:SourceArn` condition)
+- **CloudFront**: `redirect-to-https`, minimum TLS 1.2 (2021 policy), SNI
+- **Lambda IAM**: scoped to exactly `GetItem` / `PutItem` / `UpdateItem` on the one table — nothing else
+- **CI role trust**: OIDC federation restricted to `repo:<org>/<repo>:*` — no other repository can assume it
+- **CORS**: Function URL only accepts browser calls from `https://prasantjakhar.xyz` / `www`
+- **Secrets**: none. No long-lived AWS keys exist in GitHub or in code
 
-**Official Requirement**: Create an API using API Gateway and Lambda to communicate with DynamoDB.
+---
 
-**My Implementation**: Built a serverless API with:
-- RESTful API design with API Gateway
-- CORS configuration for security
-- Request validation
-- API key for additional security
-- Proper HTTP status codes and response handling
+## 💸 Estimated Monthly Cost
 
-### 10. Python
+| Service | Usage profile | Cost |
+|---|---|---|
+| S3 | < 50 MB storage, low GETs (edge-cached) | ~$0.01 |
+| CloudFront | Free tier: 1 TB egress / 10M requests | $0.00 |
+| Lambda | Free tier: 1M requests / 400k GB-s | $0.00 |
+| DynamoDB | On-demand, tiny item counts | ~$0.00 |
+| Route 53 | Hosted zone | $0.50 |
+| **Total** | | **≈ $0.51/mo** + domain registration |
 
-**Official Requirement**: Write Lambda function code in Python using boto3.
+---
 
-**My Implementation**: Developed a Python Lambda function that:
-- Uses boto3 to interact with DynamoDB
-- Implements atomic counter updates
-- Includes proper error handling and logging
-- Optimizes for cold starts
-- Uses environment variables for configuration
+## ✅ Challenge Checklist
 
-### 11. Tests
+| # | Requirement | Implementation |
+|---|---|---|
+| 1 | Certification | AWS Certified Solutions Architect — Associate |
+| 2–3 | HTML + CSS resume | Semantic single-page site, custom design system, responsive |
+| 4 | S3 static site | Private bucket behind CloudFront OAC |
+| 5 | HTTPS | CloudFront + ACM wildcard cert |
+| 6 | Custom DNS | Route 53, dual-stack (A + AAAA), root + www |
+| 7 | JavaScript counter | `fetch` with graceful fallback + count-up animation |
+| 8 | Database | DynamoDB on-demand, atomic counter, TTL cleanup |
+| 9 | API | Lambda Function URL (deliberate simplification over API Gateway) |
+| 10 | Python | boto3 handler with per-IP daily dedup |
+| 11 | Tests | 🔜 Roadmap — pytest + moto |
+| 12 | IaC | Terraform (10 files, full stack) |
+| 13 | Source control | This repo |
+| 14–15 | CI/CD | GitHub Actions with OIDC keyless auth |
+| 16 | Blog post | 🔜 Roadmap |
 
-**Official Requirement**: Include tests for the Python code.
+---
 
-**My Implementation**: Created comprehensive tests with:
-- Unit tests for the Lambda function using pytest
-- Mocking of AWS services
-- Integration tests for the API
-- Test coverage reporting
-- Automated test execution in the CI/CD pipeline
+## 🗺️ Roadmap
 
-### 12. Infrastructure as Code
+- [ ] `pytest` + `moto` unit tests for the Lambda, wired into CI
+- [ ] Terraform CI pipeline (`fmt` / `validate` / `plan` on PR)
+- [ ] Remote Terraform state (S3 backend + DynamoDB locking)
+- [ ] CloudWatch alarm on Lambda errors → SNS email
+- [ ] Asset pipeline: WebP images, minified CSS/JS, cache-control headers
+- [ ] Blog post write-up of lessons learned
 
-**Official Requirement**: Define AWS resources using SAM or Terraform.
+---
 
-**My Implementation**: Used AWS SAM to define and deploy the backend infrastructure:
-- Defined all resources in a SAM template
-- Parameterized the template for different environments
-- Included proper resource policies
-- Set up logging and monitoring
-- Implemented best practices for security
+<div align="center">
 
-### 13. Source Control
+Built by **Prasant Jakhar** · [prasantjakhar.xyz](https://prasantjakhar.xyz)
 
-**Official Requirement**: Create a GitHub repository for the backend code.
+*Feel free to fork this as a starting point for your own Cloud Resume Challenge.*
 
-**My Implementation**: Set up a GitHub repository with:
-- Well-structured project organization
-- Comprehensive .gitignore file
-- Detailed README with setup instructions
-- Branch protection rules
-- Issue and PR templates
-
-### 14. CI/CD (Back end)
-
-**Official Requirement**: Set up GitHub Actions for the backend code.
-
-**My Implementation**: Configured GitHub Actions workflow that:
-- Runs Python tests on every push
-- Packages and deploys the SAM application on successful tests
-- Includes security scanning
-- Notifies of build status
-- Uses GitHub Secrets for AWS credentials
-
-### 15. CI/CD (Front end)
-
-**Official Requirement**: Set up GitHub Actions for the frontend code.
-
-**My Implementation**: Created a GitHub Actions workflow for the frontend that:
-- Automatically deploys website updates to S3
-- Invalidates CloudFront cache
-- Includes linting and validation
-- Optimizes assets before deployment
-- Uses minimal complexity for better maintainability
-
-### 16. Blog Post
-
-**Official Requirement**: Write a blog post about what you learned.
-
-**My Implementation**: Published a detailed blog post that:
-- Explains the architecture and design decisions
-- Discusses challenges faced and solutions found
-- Shares lessons learned about AWS services
-- Provides tips for others attempting the challenge
-- Includes future improvements I plan to make
-
-## Lessons Learned
-
-Throughout this project, I gained valuable experience with:
-
-1. **AWS Services Integration**: Learning how different AWS services work together to create a complete solution.
-2. **Serverless Architecture**: Understanding the benefits and challenges of serverless computing.
-3. **Infrastructure as Code**: Appreciating the importance of defining infrastructure in code for reproducibility and consistency.
-4. **CI/CD Practices**: Implementing automated workflows to streamline development and deployment.
-5. **Cost Optimization**: Designing with AWS free tier and low-cost options in mind.
-6. **Security Best Practices**: Implementing proper IAM permissions, HTTPS, and API security.
-
-## Future Improvements
-
-Some enhancements I plan to make:
-
-1. Add more interactive elements to the resume
-2. Implement a contact form with Lambda and SES
-3. Add a blog section with content stored in DynamoDB
-4. Enhance the visitor analytics with more metrics
-5. Implement A/B testing for different resume layouts
-
-## Resources
-
-- [Official Cloud Resume Challenge](https://cloudresumechallenge.dev/docs/the-challenge/aws/)
-- [AWS Documentation](https://docs.aws.amazon.com/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions) 
+</div>
